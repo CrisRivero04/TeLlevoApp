@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar class="toolbar-turquesa">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button> 
+    </ion-buttons>
+    <ion-title>{{titulo}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title color="dark">{{bienvenida}}</ion-card-title>
+    </ion-card-header>
+
+    <form [formGroup]="persona" (ngSubmit)="registrar()">
+      <ion-input formControlName="rut" type="text" labelPlacement="stacked" label="RUT"></ion-input>
+      <ion-input formControlName="p_nombre" type="text" labelPlacement="stacked" label="Primer Nombre"></ion-input>
+      <ion-input formControlName="s_nombre" type="text" labelPlacement="stacked" label="Segundo Nombre"></ion-input>
+      <ion-input formControlName="ap_paterno" type="text" labelPlacement="stacked" label="Apellido Paterno"></ion-input>
+      <ion-input formControlName="ap_materno" type="text" labelPlacement="stacked" label="Apellido Materno"></ion-input>
+      <ion-input formControlName="contraseña" type="text" labelPlacement="stacked" label="Contraseña"></ion-input>
+      <ion-input formControlName="fecha_nacimiento" type="date" labelPlacement="stacked" label="Fecha Nacimiento"></ion-input>
+
+      <ion-label>Seleccionar Genero:</ion-label>
+      <br>
+      <br>
+      <ion-radio-group formControlName="genero">
+        <ion-radio value="femenino">Femenino</ion-radio>
+        <ion-radio value="masculino">Masculino</ion-radio>
+        <ion-radio value="otro">Otro</ion-radio>
+      </ion-radio-group>
+
+    </form>
+    <ion-button (click)="registro()" id="present-alert" type="submit" size="block" class="toolbar-naranja">REGISTRAR</ion-button>
+  </ion-card>
+</ion-content>

@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar class="toolbar-turquesa"> 
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button> 
+    </ion-buttons>
+    <ion-title>{{titulo}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <ion-input [(ngModel)]="password" type="password" label="Nueva Contraseña" labelPlacement="stacked" fill="outline"></ion-input>
+      <br>
+      <ion-input [(ngModel)]="repetir_password" type="password" label="Repetir Contraseña" labelPlacement="stacked" fill="outline"></ion-input>
+    </ion-card-content>
+    <ion-button (click)="recuperar()" id="present-alert" type="submit" size="block" class="toolbar-naranja">RESTABLECER</ion-button>
+  </ion-card>
+</ion-content>
