@@ -6,6 +6,20 @@ const routes: Routes = [
   {
     path: '',
     component: HomePage,
+    children: [
+      {
+        path: 'perfil',
+        loadChildren: () => import('../perfil/perfil.module').then( m => m.PerfilPageModule)
+      },
+      {
+        path: 'administrador',
+        loadChildren: () => import('../administrador/administrador.module').then( m => m.AdministradorPageModule)
+      },
+      {
+        path: 'viajes',
+        loadChildren: () => import('../viajes/viajes.module').then( m => m.ViajesPageModule)
+      },
+    ]
   }
 ];
 
