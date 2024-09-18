@@ -13,10 +13,10 @@ En el contexto de la pandemia y el retorno a las clases presenciales, muchas uni
 
 ---
 
--🚀 Reducir los tiempos dedicados a encontrar transporte al final del día.
--👫 Fomentar el compañerismo entre estudiantes de la misma institución.
--🌱 Reducir la huella de carbono compartiendo vehículos.
--🏫 Incentivar la asistencia presencial a clases.
+- 🚀 Reducir los tiempos dedicados a encontrar transporte al final del día.
+- 👫 Fomentar el compañerismo entre estudiantes de la misma institución.
+- 🌱 Reducir la huella de carbono compartiendo vehículos.
+- 🏫 Incentivar la asistencia presencial a clases.
 
 ---
 
@@ -37,25 +37,25 @@ Sigue estos pasos para configurar el proyecto en tu entorno local:
 1. Clona este repositorio:
 
 bash
-Copiar código
+Copiar código:
 git clone https://github.com/tuusuario/TeLlevoAPP.git
 
 2. Navega al directorio del proyecto:
 
 bash
-Copiar código
+Copiar código:
 cd TeLlevoAPP
 
 3. Instala las dependencias necesarias:
 
 bash
-Copiar código
+Copiar código:
 npm install
 
 4. Inicia la aplicación en modo de desarrollo:
 
 bash
-Copiar código
+Copiar código:
 ionic serve
 
 ---
@@ -72,45 +72,45 @@ La paleta de colores utilizada en TeLlevoAPP está diseñada para ser moderna y 
 ---
 
 ## 📋 **Páginas Clave**
--Página de Inicio de Sesión: Permite a los usuarios ingresar su nombre de usuario y contraseña.
--Página de Restablecer Contraseña: Los usuarios pueden recuperar su acceso en caso de haber olvidado su contraseña.
--Página de Inicio: Da la bienvenida a los usuarios y permite acceder a las funciones principales de la app.
+- Página de Inicio de Sesión: Permite a los usuarios ingresar su nombre de usuario y contraseña.
+- Página de Restablecer Contraseña: Los usuarios pueden recuperar su acceso en caso de haber olvidado su contraseña.
+- Página de Inicio: Da la bienvenida a los usuarios y permite acceder a las funciones principales de la app.
 
 ---
 
 ## 🛠️ **Comandos Útiles**
 1. Instalar dependencias (Node.js y Angular)
 bash
-Copiar código
+Copiar código:
 npm install
 
 2. Iniciar el servidor de desarrollo (Ionic)
 bash
-Copiar código
+Copiar código:
 ionic serve
 
 3. Construir la aplicación para producción
 bash
-Copiar código
+Copiar código:
 ng build --prod
 
 4. Ejecutar pruebas unitarias (Angular)
 bash
-Copiar código
+Copiar código:
 ng test
 
 5. Linter para verificar la calidad del código
 bash
-Copiar código
+Copiar código:
 npm run lint
 
 ---
 
 ## 🛡️ **Tecnologías Utilizadas**
 
--Ionic Framework: Para el desarrollo de aplicaciones móviles híbridas en Android e iOS.
--Angular: Framework para la creación de componentes de la aplicación y lógica del cliente.
--Node.js: Servidor para gestionar futuras integraciones.
+- Ionic Framework: Para el desarrollo de aplicaciones móviles híbridas en Android e iOS.
+- Angular: Framework para la creación de componentes de la aplicación y lógica del cliente.
+- Node.js: Servidor para gestionar futuras integraciones.
 
 ## 📄 **Licencia**
 Este proyecto está bajo la Licencia MIT - consulta el archivo LICENSE para más detalles.
@@ -118,6 +118,6 @@ Este proyecto está bajo la Licencia MIT - consulta el archivo LICENSE para más
 ## 📧 **Contacto**
 Si tienes alguna pregunta o sugerencia sobre el proyecto, no dudes en ponerte en contacto con nosotros:
 
-Emails: cr.jarar@duocuc.cl, je.padilla@duocuc.cl
-GitHub: GitHub del Proyecto
+- Emails: cr.jarar@duocuc.cl, je.padilla@duocuc.cl
+- GitHub: GitHub del Proyecto
 ¡Gracias por contribuir y usar TeLlevoAPP! 🙌
