@@ -1,6 +1,6 @@
 # 🚗 **TeLlevoAPP** 🎒
 
-![TeLlevoAPP Logo](./assets/TeLlevoAppLogo.jpeg)
+![TeLlevoAPP Logo](assets/TeLlevoAppLogo.jpeg)
 
 **TeLlevoAPP** es una aplicación móvil híbrida desarrollada para ayudar a los estudiantes de educación superior a organizar el transporte de regreso a casa al final de las clases, facilitando la conexión entre estudiantes con vehículos y aquellos que necesitan este servicio.
 
