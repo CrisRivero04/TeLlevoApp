@@ -14,23 +14,25 @@
     </ion-card-header>
 
     <form [formGroup]="persona" (ngSubmit)="registrar()">
+      <ion-input formControlName="correo" type="text" labelPlacement="stacked" label="Correo" ></ion-input>
       <ion-input formControlName="rut" type="text" labelPlacement="stacked" label="RUT"></ion-input>
-      <ion-input formControlName="p_nombre" type="text" labelPlacement="stacked" label="Primer Nombre"></ion-input>
-      <ion-input formControlName="s_nombre" type="text" labelPlacement="stacked" label="Segundo Nombre"></ion-input>
-      <ion-input formControlName="ap_paterno" type="text" labelPlacement="stacked" label="Apellido Paterno"></ion-input>
-      <ion-input formControlName="ap_materno" type="text" labelPlacement="stacked" label="Apellido Materno"></ion-input>
-      <ion-input formControlName="contraseña" type="text" labelPlacement="stacked" label="Contraseña"></ion-input>
+      <ion-input formControlName="nombre" type="text" labelPlacement="stacked" label="Nombre"></ion-input>
+      <ion-input formControlName="apellido" type="text" labelPlacement="stacked" label="Apellido"></ion-input>
+      <ion-input formControlName="contraseña" type="password" labelPlacement="stacked" label="Contraseña"></ion-input>
+      <ion-input formControlName="rep_contraseña" type="password" labelPlacement="stacked" label="Repetir Contraseña"></ion-input>
       <ion-input formControlName="fecha_nacimiento" type="date" labelPlacement="stacked" label="Fecha Nacimiento"></ion-input>
 
-      <ion-label>Seleccionar Genero:</ion-label>
+      <ion-label>Tiene Vehiculo:</ion-label>
       <br>
-      <br>
-      <ion-radio-group formControlName="genero">
-        <ion-radio value="femenino">Femenino</ion-radio>
-        <ion-radio value="masculino">Masculino</ion-radio>
-        <ion-radio value="otro">Otro</ion-radio>
+      <ion-radio-group formControlName="tiene_vehiculo">
+        <ion-radio value="si">Si</ion-radio>
+        <ion-radio value="no">No</ion-radio>
       </ion-radio-group>
 
+      <ion-input *ngIf="persona.controls.tiene_vehiculo.value=='si'" formControlName="marca_vehiculo" type="text" label="Marca Vehiculo" labelPlacement="stacked"></ion-input>
+      <ion-input *ngIf="persona.controls.tiene_vehiculo.value=='si'" formControlName="modelo_vehiculo" type="text" label="Modelo Vehiculo" labelPlacement="stacked"></ion-input>
+      <ion-input *ngIf="persona.controls.tiene_vehiculo.value=='si'" formControlName="patente" type="text" label="Patente del Vehiculo" labelPlacement="stacked"></ion-input>
+      <ion-input *ngIf="persona.controls.tiene_vehiculo.value=='si'" formControlName="anio_inscripcion" type="text" label="Año de Inscripcion" labelPlacement="stacked"></ion-input>
     </form>
     <ion-button (click)="registro()" id="present-alert" type="submit" size="block" class="toolbar-naranja">REGISTRAR</ion-button>
   </ion-card>
