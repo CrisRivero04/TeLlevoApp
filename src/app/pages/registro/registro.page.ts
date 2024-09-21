@@ -1,46 +1,94 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { AlertController, NavController } from '@ionic/angular';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-registro',
   templateUrl: './registro.page.html',
   styleUrls: ['./registro.page.scss'],
 })
-export class RegistroPage implements OnInit {
-  titulo: string = "Registro / TeLlevo App";
-  bienvenida: string ="Bienvenido a TeLlevo App, porfavor, ingresa tus datos para crear tu cuenta!.";
+export class RegistroPage {
 
-  persona = new FormGroup({
-    rut: new FormControl('',[Validators.minLength(9),Validators.maxLength(10),Validators.required,Validators.pattern("[0-9]{7,8}-[0-9kK]{1}")]),
-    correo: new FormControl('',[Validators.required]),
-    nombre: new FormControl('',[Validators.minLength(2),Validators.required,Validators.pattern("[a-z]{2,25}")]),
-    apellido: new FormControl('',[Validators.minLength(2),Validators.required,Validators.pattern("[a-z]{2,25}")]),
-    contraseña: new FormControl('',[Validators.required]),
-    rep_contraseña: new FormControl('',[Validators.required]),
-    fecha_nacimiento: new FormControl('',[Validators.required]),
-    tiene_vehiculo: new FormControl('no',[Validators.required]),
-    marca_vehiculo: new FormControl('',[Validators.required,Validators.pattern("[a-z][A-Z]")]),
-    modelo_vehiculo: new FormControl('',[Validators.required,Validators.pattern("[a-z][A-Z]")]),
-    patente: new FormControl('',[Validators.required,Validators.minLength(6),Validators.maxLength(6),Validators.pattern("[a-z][A-Z][0-9]")]),
-    anio_inscripcion: new FormControl('',[Validators.required,Validators.pattern("{1900, 2024}")])
-  });
+  persona: FormGroup;
+  bienvenida: string = 'Bienvenido, por favor complete el formulario.';
+  titulo: string = 'Registro de Usuario'; 
 
-  constructor(private router: Router) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private alertController: AlertController,  
+    private navCtrl: NavController            
+  ) {
+    this.persona = this.formBuilder.group({
+      correo: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@duocuc\\.cl$')]],  
+      numero_celular: ['', [Validators.required, Validators.pattern('^\\+569[0-9]{8}$')]], 
+      rut: ['', [Validators.required, Validators.pattern('^[0-9]{7,8}-[0-9Kk]{1}$')]], 
+      nombre: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]], 
+      apellido: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]], 
+      contraseña: ['', [Validators.required, Validators.minLength(6)]],
+      rep_contraseña: ['', Validators.required],
+      fecha_nacimiento: ['', [Validators.required, this.validarEdadMinima]],
+      tiene_vehiculo: ['', Validators.required],
+      marca_vehiculo: [''],
+      modelo_vehiculo: [''],
+      patente: [''],
+      anio_inscripcion: ['']
+    }, { validators: this.passwordsCoinciden });
 
-  ngOnInit() {
+    this.persona.get('tiene_vehiculo')?.valueChanges.subscribe(value => {
+      if (value === 'si') {
+        this.persona.get('marca_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
+        this.persona.get('modelo_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
+        this.persona.get('patente')?.setValidators([Validators.required, Validators.pattern('^[A-Za-z]{2}-[A-Za-z]{2}-[0-9]{2}$')]); // Patente formato chileno
+        this.persona.get('anio_inscripcion')?.setValidators([Validators.required, Validators.min(2012), Validators.max(2024)]); // Año de inscripción entre 2012 y 2024
+      } else {
+        this.persona.get('marca_vehiculo')?.clearValidators();
+        this.persona.get('modelo_vehiculo')?.clearValidators();
+        this.persona.get('patente')?.clearValidators();
+        this.persona.get('anio_inscripcion')?.clearValidators();
+      }
+      this.persona.get('marca_vehiculo')?.updateValueAndValidity();
+      this.persona.get('modelo_vehiculo')?.updateValueAndValidity();
+      this.persona.get('patente')?.updateValueAndValidity();
+      this.persona.get('anio_inscripcion')?.updateValueAndValidity();
+    });
   }
 
-  registro() {
-    // Aquí puedes agregar la lógica de autenticación
-    console.log('Iniciando sesión...');
-    this.router.navigate(['/login']); // Navega a la página principal tras el login
+  // Validar que las contraseñas coincidan
+  passwordsCoinciden(formGroup: AbstractControl) {
+    const contraseña = formGroup.get('contraseña')?.value;
+    const repContraseña = formGroup.get('rep_contraseña')?.value;
+    return contraseña === repContraseña ? null : { noCoinciden: true };
   }
 
-  public registrar():void{
-    //validadciones? llamar a un posible CRUD
-    //console.log(this.persona.value);
-    //alert("Registrado!");
-    //this.router.navigate(['/login']);
+  // Validar que la fecha de nacimiento sea de al menos 18 años
+  validarEdadMinima(control: AbstractControl) {
+    const fechaNacimiento = moment(control.value);
+    const edad = moment().diff(fechaNacimiento, 'years');
+    return edad >= 18 ? null : { menorDeEdad: true };
+  }
+
+  // Función para mostrar alerta y redirigir
+  async mostrarAlerta() {
+    const alert = await this.alertController.create({
+      header: 'Cuenta creada',
+      message: 'Se ha creado tu cuenta correctamente',
+      buttons: [{
+        text: 'OK',
+        handler: () => {
+          this.navCtrl.navigateRoot('/login'); 
+        }
+      }]
+    });
+    await alert.present();
+  }
+
+  registrar() {
+    if (this.persona.valid) {
+      // Mostrar la alerta de confirmación de registro
+      this.mostrarAlerta();
+    } else {
+      console.log('Formulario no válido');
+    }
   }
 }

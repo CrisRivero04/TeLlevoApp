@@ -14,13 +14,51 @@
     </ion-card-header>
 
     <form [formGroup]="persona" (ngSubmit)="registrar()">
-      <ion-input formControlName="correo" type="text" labelPlacement="stacked" label="Correo" ></ion-input>
+      <ion-input formControlName="correo" type="text" labelPlacement="stacked" label="Correo Institucional" ></ion-input>
+      <ion-text *ngIf="persona?.get('correo')?.hasError('required') && persona?.get('correo')?.touched" color="danger">
+        El correo es obligatorio.
+      </ion-text>
+      <ion-text *ngIf="persona?.get('correo')?.hasError('pattern') && persona?.get('correo')?.touched" color="danger">
+        Formato de correo no válido.
+      </ion-text>
+
+      <ion-input formControlName="numero_celular" type="text" labelPlacement="stacked" label="Número de Celular"></ion-input>
+      <ion-text *ngIf="persona?.get('numero_celular')?.hasError('required') && persona?.get('numero_celular')?.touched" color="danger">
+        El número de celular es obligatorio.
+      </ion-text>
+      <ion-text *ngIf="persona?.get('numero_celular')?.hasError('pattern') && persona?.get('numero_celular')?.touched" color="danger">
+        El número de celular debe tener el formato +569XXXXXXXX.
+      </ion-text>
+
       <ion-input formControlName="rut" type="text" labelPlacement="stacked" label="RUT"></ion-input>
+      <ion-text *ngIf="persona?.get('rut')?.hasError('required') && persona?.get('rut')?.touched" color="danger">
+        El RUT es obligatorio.
+      </ion-text>
+
       <ion-input formControlName="nombre" type="text" labelPlacement="stacked" label="Nombre"></ion-input>
+      <ion-text *ngIf="persona?.get('nombre')?.hasError('required') && persona?.get('nombre')?.touched" color="danger">
+        El nombre es obligatorio.
+      </ion-text>
+
       <ion-input formControlName="apellido" type="text" labelPlacement="stacked" label="Apellido"></ion-input>
-      <ion-input formControlName="contraseña" type="password" labelPlacement="stacked" label="Contraseña"></ion-input>
+      <ion-text *ngIf="persona?.get('apellido')?.hasError('required') && persona?.get('apellido')?.touched" color="danger">
+        El apellido es obligatorio.
+      </ion-text>
+
+      <ion-input formControlName="contraseña" type="password" labelPlacement="stacked" label="Contraseña (Minimo 6 caracteres.)"></ion-input>
+      <ion-text *ngIf="persona?.get('contraseña')?.hasError('required') && persona?.get('contraseña')?.touched" color="danger">
+        La contraseña es obligatoria.
+      </ion-text>
+
       <ion-input formControlName="rep_contraseña" type="password" labelPlacement="stacked" label="Repetir Contraseña"></ion-input>
+      <ion-text *ngIf="persona?.hasError('noCoinciden') && persona?.get('rep_contraseña')?.touched" color="danger">
+        Las contraseñas no coinciden.
+      </ion-text>
+
       <ion-input formControlName="fecha_nacimiento" type="date" labelPlacement="stacked" label="Fecha Nacimiento"></ion-input>
+      <ion-text *ngIf="persona?.get('fecha_nacimiento')?.hasError('menorDeEdad') && persona?.get('fecha_nacimiento')?.touched" color="danger">
+        Debes tener al menos 18 años para crear una cuenta.
+      </ion-text>
 
       <ion-label>Tiene Vehiculo:</ion-label>
       <br>
@@ -29,11 +67,12 @@
         <ion-radio value="no">No</ion-radio>
       </ion-radio-group>
 
-      <ion-input *ngIf="persona.controls.tiene_vehiculo.value=='si'" formControlName="marca_vehiculo" type="text" label="Marca Vehiculo" labelPlacement="stacked"></ion-input>
-      <ion-input *ngIf="persona.controls.tiene_vehiculo.value=='si'" formControlName="modelo_vehiculo" type="text" label="Modelo Vehiculo" labelPlacement="stacked"></ion-input>
-      <ion-input *ngIf="persona.controls.tiene_vehiculo.value=='si'" formControlName="patente" type="text" label="Patente del Vehiculo" labelPlacement="stacked"></ion-input>
-      <ion-input *ngIf="persona.controls.tiene_vehiculo.value=='si'" formControlName="anio_inscripcion" type="text" label="Año de Inscripcion" labelPlacement="stacked"></ion-input>
+      <ion-input *ngIf="persona.controls['tiene_vehiculo'].value == 'si'" formControlName="marca_vehiculo" type="text" label="Marca Vehiculo" labelPlacement="stacked"></ion-input>
+      <ion-input *ngIf="persona.controls['tiene_vehiculo'].value == 'si'" formControlName="modelo_vehiculo" type="text" label="Modelo Vehiculo" labelPlacement="stacked"></ion-input>
+      <ion-input *ngIf="persona.controls['tiene_vehiculo'].value == 'si'" formControlName="patente" type="text" label="Patente del Vehiculo (Ej: xx-xx-10)" labelPlacement="stacked"></ion-input>
+      <ion-input *ngIf="persona.controls['tiene_vehiculo'].value == 'si'" formControlName="anio_inscripcion" type="text" label="Año de Inscripcion" labelPlacement="stacked"></ion-input>
+
+      <ion-button id="present-alert" type="submit" size="block" class="toolbar-naranja">REGISTRAR</ion-button>
     </form>
-    <ion-button (click)="registro()" id="present-alert" type="submit" size="block" class="toolbar-naranja">REGISTRAR</ion-button>
   </ion-card>
 </ion-content>
