@@ -31,6 +31,15 @@ export class UsuarioService {
     return true;
   }
 
+  public deleteUser(rut: string){
+    const indice = this.usuarios.findIndex(usuario => usuario.rut == rut);
+    if(indice == -1){
+      return false;
+    }
+    this.usuarios.splice(indice, 1);
+    return true;
+  }
+
   public obtenerUsuario(rut:string):any{
     return this.usuarios.find(usuario => usuario.rut == rut);
   }
