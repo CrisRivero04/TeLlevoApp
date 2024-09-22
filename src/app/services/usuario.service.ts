@@ -14,6 +14,14 @@ export class UsuarioService {
 
   //aqui va la lógica(crud)
 
+  public createUser(usuario:any){
+    if(this.obtenerUsuario(usuario.rut) == undefined){
+      this.usuarios.push(usuario);
+      return true;
+    }
+    return false;
+  }
+
   public obtenerUsuario(rut:string):any{
     return this.usuarios.find(usuario => usuario.rut == rut);
   }
