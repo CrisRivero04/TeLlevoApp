@@ -6,8 +6,19 @@ import { Injectable } from '@angular/core';
 export class UsuarioService {
   //aqui van las variables
   usuarios: any[] = [
-
-    
+    {
+      correo: 'admin@duocuc.cl',
+      numero_celular: '+56912345678',
+      rut: '12345678-9',
+      nombre: 'alan',
+      apellido: 'gajardo',
+      contraseña: 'juanpablomelapela2024',
+      rep_contraseña: 'juanpablomelapela2024',
+      fecha_nacimiento: '25-04-1999',
+      tiene_vehiculo: 'si',
+      marca_vehiculo: 'renault symbol',
+      anio_inscripcion: '2014'
+    }
   ];
 
   constructor() { }
