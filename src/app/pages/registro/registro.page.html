@@ -13,7 +13,7 @@
       <ion-card-title color="dark">{{bienvenida}}</ion-card-title>
     </ion-card-header>
 
-    <form [formGroup]="persona" (ngSubmit)="registrar()">
+    <form [formGroup]="persona" (ngSubmit)="registroUsuario()">
       <ion-input formControlName="correo" type="text" labelPlacement="stacked" label="Correo Institucional" ></ion-input>
       <ion-text *ngIf="persona?.get('correo')?.hasError('required') && persona?.get('correo')?.touched" color="danger">
         El correo es obligatorio.

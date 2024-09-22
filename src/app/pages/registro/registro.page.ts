@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { AlertController, NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
 import * as moment from 'moment';
+import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
   selector: 'app-registro',
@@ -17,12 +19,15 @@ export class RegistroPage {
   constructor(
     private formBuilder: FormBuilder,
     private alertController: AlertController,  
-    private navCtrl: NavController            
+    private navCtrl: NavController,
+    private usuarioService: UsuarioService,
+    private router: Router         
   ) {
+
     this.persona = this.formBuilder.group({
       correo: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@duocuc\\.cl$')]],  
       numero_celular: ['', [Validators.required, Validators.pattern('^\\+569[0-9]{8}$')]], 
-      rut: ['', [Validators.required, Validators.pattern('^[0-9]{7,8}-[0-9Kk]{1}$')]], 
+      rut: ['',[Validators.minLength(9),Validators.maxLength(10),Validators.required,Validators.pattern("[0-9]{7,8}-[0-9kK]{1}")]], 
       nombre: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]], 
       apellido: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]], 
       contraseña: ['', [Validators.required, Validators.minLength(6)]],
@@ -83,12 +88,21 @@ export class RegistroPage {
     await alert.present();
   }
 
-  registrar() {
-    if (this.persona.valid) {
+  //registrar() {
+    //if (this.persona.valid) {
       // Mostrar la alerta de confirmación de registro
-      this.mostrarAlerta();
+      //this.mostrarAlerta();
+    //} else {
+      //console.log('Formulario no válido');
+    //}
+  //}
+
+  public registroUsuario():void{
+    if(this.usuarioService.createUser(this.persona.value)){
+      console.log("El Usuario se ha creado con éxito!")
+      this.router.navigate(['/login'])
     } else {
-      console.log('Formulario no válido');
+      console.log("Error! El Usuario no se ha podido crear!.")
     }
   }
 }

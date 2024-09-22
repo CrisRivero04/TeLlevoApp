@@ -1,3 +1,34 @@
 <ion-content>
-  
+    <ion-card>
+        
+      <form [formGroup]="persona" (ngSubmit)="createUser()">
+        <ion-input formControlName="correo" type="text" labelPlacement="stacked" label="Correo Institucional" ></ion-input>
+        <br>
+        <ion-input formControlName="numero_celular" type="text" labelPlacement="stacked" label="Número de Celular"></ion-input>
+        <br>
+        <ion-input formControlName="rut" type="text" labelPlacement="stacked" label="RUT"></ion-input>
+        <br>
+        <ion-input formControlName="nombre" type="text" label="Nombre" labelPlacement="stacked" fill="outline"></ion-input>
+        <br>
+        <ion-input formControlName="apellido" type="text" labelPlacement="stacked" label="Apellido"></ion-input>
+        <br>
+        <ion-input formControlName="contraseña" type="password" labelPlacement="stacked" label="Contraseña (Minimo 6 caracteres.)"></ion-input>
+        <br>
+        <ion-input formControlName="rep_contraseña" type="password" labelPlacement="stacked" label="Repetir Contraseña"></ion-input>
+        <br>
+        <ion-input formControlName="fecha_nacimiento" type="date" labelPlacement="stacked" label="Fecha Nacimiento"></ion-input>
+        <br>
+        <ion-label>Tiene Vehiculo:</ion-label>
+        <br>
+        <ion-radio-group formControlName="tiene_vehiculo">
+            <ion-radio value="si">Si</ion-radio>
+            <ion-radio value="no">No</ion-radio>
+        </ion-radio-group>
+
+        
+        <ion-button id="present-alert" type="submit" size="block" class="toolbar-naranja">REGISTRAR</ion-button>
+        <ion-button id="present-alert" type="submit" size="block" class="toolbar-naranja">MODIFICAR</ion-button>
+        <ion-button id="present-alert" type="submit" size="block" class="toolbar-naranja">ELIMINAR</ion-button>
+      </form>
+    </ion-card>
 </ion-content>
