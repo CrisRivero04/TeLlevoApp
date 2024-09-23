@@ -44,9 +44,9 @@ export class RegistroPage {
       if (value === 'si') {
         this.persona.get('marca_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
         this.persona.get('modelo_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
-        this.persona.get('patente')?.setValidators([Validators.required, Validators.pattern('^[A-Za-z]{2}-[A-Za-z]{2}-[0-9]{2}$')]); // Patente formato chileno
+        this.persona.get('patente')?.setValidators([Validators.required, Validators.pattern('^[A-Za-z]{2}[A-Za-z]{2}[0-9]{2}$')]); // Patente formato chileno
         this.persona.get('anio_inscripcion')?.setValidators([Validators.required, Validators.min(2012), Validators.max(2024)]); // Año de inscripción entre 2012 y 2024
-      } else {
+      } else { 
         this.persona.get('marca_vehiculo')?.clearValidators();
         this.persona.get('modelo_vehiculo')?.clearValidators();
         this.persona.get('patente')?.clearValidators();
@@ -88,21 +88,16 @@ export class RegistroPage {
     await alert.present();
   }
 
-  //registrar() {
-    //if (this.persona.valid) {
-      // Mostrar la alerta de confirmación de registro
-      //this.mostrarAlerta();
-    //} else {
-      //console.log('Formulario no válido');
-    //}
-  //}
+  public registroUsuario(): void {
+    const usuarioData = { ...this.persona.value };
+    usuarioData.fecha_nacimiento = moment(usuarioData.fecha_nacimiento).format('YYYY-MM-DD');
+    usuarioData.tipo = 'Usuario'; 
 
-  public registroUsuario():void{
-    if(this.usuarioService.createUser(this.persona.value)){
-      console.log("El Usuario se ha creado con éxito!")
-      this.router.navigate(['/login'])
+    if (this.usuarioService.createUser(usuarioData)) {
+      console.log("El Usuario se ha creado con éxito!");
+      this.router.navigate(['/login']);
     } else {
-      console.log("Error! El Usuario no se ha podido crear!.")
+      console.log("Error! El Usuario no se ha podido crear!");
     }
   }
 }

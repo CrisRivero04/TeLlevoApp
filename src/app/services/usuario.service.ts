@@ -7,16 +7,19 @@ export class UsuarioService {
   //aqui van las variables
   usuarios: any[] = [
     {
+      tipo: 'Admin',
       correo: 'admin@duocuc.cl',
       numero_celular: '+56912345678',
       rut: '12345678-9',
       nombre: 'alan',
       apellido: 'gajardo',
-      contraseña: 'juanpablomelapela2024',
-      rep_contraseña: 'juanpablomelapela2024',
-      fecha_nacimiento: '25-04-1999',
+      contraseña: '12345678',
+      rep_contraseña: '12345678',
+      fecha_nacimiento: '1999-04-25',
       tiene_vehiculo: 'si',
-      marca_vehiculo: 'renault symbol',
+      marca_vehiculo: 'renault',
+      modelo_vehiculo: 'symbol',
+      patente: 'GTDB20',
       anio_inscripcion: '2014'
     }
   ];
