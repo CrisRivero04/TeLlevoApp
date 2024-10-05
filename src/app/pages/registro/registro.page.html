@@ -34,6 +34,9 @@
       <ion-text *ngIf="persona?.get('rut')?.hasError('required') && persona?.get('rut')?.touched" color="danger">
         El RUT es obligatorio.
       </ion-text>
+      <ion-text *ngIf="persona?.get('rut')?.hasError('rutInvalido') && persona?.get('rut')?.touched && !persona?.get('rut')?.hasError('required')" color="danger">
+        El RUT ingresado es incorrecto. Verifique el número y el dígito verificador.
+      </ion-text>
 
       <ion-input formControlName="nombre" type="text" labelPlacement="stacked" label="Nombre"></ion-input>
       <ion-text *ngIf="persona?.get('nombre')?.hasError('required') && persona?.get('nombre')?.touched" color="danger">
@@ -56,6 +59,9 @@
       </ion-text>
 
       <ion-input formControlName="fecha_nacimiento" type="date" labelPlacement="stacked" label="Fecha Nacimiento"></ion-input>
+      <ion-text *ngIf="persona?.get('fecha_nacimiento')?.hasError('required') && persona?.get('fecha_nacimiento')?.touched" color="danger">
+        La fecha de nacimiento es obligatoria.
+      </ion-text>
       <ion-text *ngIf="persona?.get('fecha_nacimiento')?.hasError('menorDeEdad') && persona?.get('fecha_nacimiento')?.touched" color="danger">
         Debes tener al menos 18 años para crear una cuenta.
       </ion-text>

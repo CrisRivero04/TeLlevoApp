@@ -31,7 +31,7 @@ export class AdministradorPage {
     this.persona = this.formBuilder.group({
       correo: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@duocuc\\.cl$')]],  
       numero_celular: ['', [Validators.required, Validators.pattern('^\\+569[0-9]{8}$')]], 
-      rut: ['',[Validators.minLength(9),Validators.maxLength(10),Validators.required,Validators.pattern("[0-9]{7,8}-[0-9kK]{1}")]], 
+      rut: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(10), this.validarRut.bind(this)]],  
       nombre: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]], 
       apellido: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]], 
       contraseña: ['', [Validators.required, Validators.minLength(8)]],
@@ -177,5 +177,51 @@ export class AdministradorPage {
   limpiarFormulario() {
     this.persona.reset();  // Esto reinicia el formulario
     this.editando = false; // Esto asegura que el botón vuelva a decir "Registrar"
+  }
+
+  // Método para calcular el dígito verificador del RUT
+  calcularDigitoVerificador(rut: string): string {
+    let rutLimpio = rut.replace(/\./g, '').replace(/-/g, '');
+  
+    if (!/^\d+$/.test(rutLimpio)) {
+      throw new Error('RUT inválido');
+    }
+  
+    let suma = 0;
+    let multiplicador = 2;
+  
+    for (let i = rutLimpio.length - 1; i >= 0; i--) {
+      suma += parseInt(rutLimpio.charAt(i), 10) * multiplicador;
+      multiplicador = multiplicador < 7 ? multiplicador + 1 : 2;
+    }
+  
+    const resto = suma % 11;
+    const digito = 11 - resto;
+  
+    if (digito === 10) {
+      return 'K';
+    } else if (digito === 11) {
+      return '0';
+    } else {
+      return digito.toString();
+    }
+  }
+
+  // Validar el RUT ingresado
+  validarRut(control: AbstractControl): { [key: string]: boolean } | null {
+    const rutCompleto = control.value;
+    
+    if (!rutCompleto || !/^[0-9]+-[0-9kK]{1}$/.test(rutCompleto)) {
+      return { rutInvalido: true };
+    }
+
+    const [rut, digito] = rutCompleto.split('-');
+    const digitoVerificadorCalculado = this.calcularDigitoVerificador(rut);
+
+    if (digito.toLowerCase() !== digitoVerificadorCalculado.toLowerCase()) {
+      return { rutInvalido: true };
+    }
+
+    return null;
   }
 }
