@@ -36,6 +36,7 @@ export class RegistroPage {
       tiene_vehiculo: ['', Validators.required],
       marca_vehiculo: [''],
       modelo_vehiculo: [''],
+      cant_asientos: [''],
       patente: [''],
       anio_inscripcion: ['']
     }, { validators: this.passwordsCoinciden });
@@ -44,16 +45,19 @@ export class RegistroPage {
       if (value === 'si') {
         this.persona.get('marca_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
         this.persona.get('modelo_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
+        this.persona.get('cant_asientos')?.setValidators([Validators.required, Validators.min(4), Validators.max(32),Validators.pattern('^[0-9]+$')]);
         this.persona.get('patente')?.setValidators([Validators.required, Validators.pattern('^[A-Za-z]{2}[A-Za-z]{2}[0-9]{2}$')]); // Patente formato chileno
         this.persona.get('anio_inscripcion')?.setValidators([Validators.required, Validators.min(2012), Validators.max(2024)]); // Año de inscripción entre 2012 y 2024
       } else { 
         this.persona.get('marca_vehiculo')?.clearValidators();
         this.persona.get('modelo_vehiculo')?.clearValidators();
+        this.persona.get('cant_asientos')?.clearValidators();
         this.persona.get('patente')?.clearValidators();
         this.persona.get('anio_inscripcion')?.clearValidators();
       }
       this.persona.get('marca_vehiculo')?.updateValueAndValidity();
       this.persona.get('modelo_vehiculo')?.updateValueAndValidity();
+      this.persona.get('cant_asientos')?.updateValueAndValidity();
       this.persona.get('patente')?.updateValueAndValidity();
       this.persona.get('anio_inscripcion')?.updateValueAndValidity();
     });

@@ -19,6 +19,7 @@ export class UsuarioService {
       tiene_vehiculo: 'si',
       marca_vehiculo: 'renault',
       modelo_vehiculo: 'symbol',
+      cant_asientos: '4',
       patente: 'GTDB20',
       anio_inscripcion: '2014'
     }

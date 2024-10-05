@@ -75,7 +75,8 @@
 
       <ion-input *ngIf="persona.controls['tiene_vehiculo'].value == 'si'" formControlName="marca_vehiculo" type="text" label="Marca Vehiculo" labelPlacement="stacked"></ion-input>
       <ion-input *ngIf="persona.controls['tiene_vehiculo'].value == 'si'" formControlName="modelo_vehiculo" type="text" label="Modelo Vehiculo" labelPlacement="stacked"></ion-input>
-      <ion-input *ngIf="persona.controls['tiene_vehiculo'].value == 'si'" formControlName="patente" type="text" label="Patente del Vehiculo (Ej: xx-xx-10)" labelPlacement="stacked"></ion-input>
+      <ion-input *ngIf="persona.controls['tiene_vehiculo'].value == 'si'" formControlName="cant_asientos" type="text" label="Cantidad de Asientos (Minimo 4, Maximo 32)" labelPlacement="stacked"></ion-input>
+      <ion-input *ngIf="persona.controls['tiene_vehiculo'].value == 'si'" formControlName="patente" type="text" label="Patente del Vehiculo (Ej: bcfg10)" labelPlacement="stacked"></ion-input>
       <ion-input *ngIf="persona.controls['tiene_vehiculo'].value == 'si'" formControlName="anio_inscripcion" type="text" label="Año de Inscripcion" labelPlacement="stacked"></ion-input>
 
       <ion-button id="present-alert" type="submit" size="block" class="toolbar-naranja">REGISTRAR</ion-button>
