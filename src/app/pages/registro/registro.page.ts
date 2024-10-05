@@ -73,29 +73,30 @@ export class RegistroPage {
     return edad >= 18 ? null : { menorDeEdad: true };
   }
 
-  // Función para mostrar alerta y redirigir
+  // Función para mostrar un Alert con mensaje fijo y botón de redirección
   async mostrarAlerta() {
     const alert = await this.alertController.create({
-      header: 'Cuenta creada',
-      message: 'Se ha creado tu cuenta correctamente',
+      header: 'Cuenta Creada!',
+      message: 'Tu cuenta ha sido creada correctamente.',
       buttons: [{
-        text: 'OK',
+        text: 'Aceptar',
         handler: () => {
-          this.navCtrl.navigateRoot('/login'); 
+          this.router.navigate(['/login']);  // Redirigir a login cuando el usuario presione "Aceptar"
         }
       }]
     });
     await alert.present();
   }
 
+  // Función para registrar usuario
   public registroUsuario(): void {
     const usuarioData = { ...this.persona.value };
     usuarioData.fecha_nacimiento = moment(usuarioData.fecha_nacimiento).format('YYYY-MM-DD');
-    usuarioData.tipo = 'Usuario'; 
+    usuarioData.tipo = 'Alumno'; 
 
     if (this.usuarioService.createUser(usuarioData)) {
       console.log("El Usuario se ha creado con éxito!");
-      this.router.navigate(['/login']);
+      this.mostrarAlerta();  // Muestra la alerta en pantalla
     } else {
       console.log("Error! El Usuario no se ha podido crear!");
     }

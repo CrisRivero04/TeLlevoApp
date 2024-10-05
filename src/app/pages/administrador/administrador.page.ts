@@ -110,7 +110,7 @@ export class AdministradorPage {
   guardarCambios() {
     const usuarioData = { ...this.persona.value };
     usuarioData.fecha_nacimiento = moment(usuarioData.fecha_nacimiento).format('YYYY-MM-DD'); // Formato actualizado
-    usuarioData.tipo = 'Usuario'; // Asignar tipo 'Usuario'
+    usuarioData.tipo = 'Alumno'; // Asignar tipo 'Usuario'
 
     if (this.editando) {
       // Actualizar el usuario si estamos en modo edición
@@ -162,7 +162,7 @@ export class AdministradorPage {
   public registroUsuario(): void {
     const usuarioData = { ...this.persona.value };
     usuarioData.fecha_nacimiento = moment(usuarioData.fecha_nacimiento).format('YYYY-MM-DD'); // Formato de fecha
-    usuarioData.tipo = 'Usuario'; // Asignar tipo 'Usuario'
+    usuarioData.tipo = 'Alumno'; // Asignar tipo 'Usuario'
     
     console.log(this.persona.value);  // Verifica los datos enviados al servicio
     if (this.usuarioService.createUser(usuarioData)) {

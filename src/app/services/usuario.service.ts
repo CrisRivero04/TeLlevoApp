@@ -7,7 +7,7 @@ export class UsuarioService {
   //aqui van las variables
   usuarios: any[] = [
     {
-      tipo: 'Admin',
+      tipo: 'Administrador',
       correo: 'admin@duocuc.cl',
       numero_celular: '+56912345678',
       rut: '12345678-9',
