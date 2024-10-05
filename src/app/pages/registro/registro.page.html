@@ -45,7 +45,7 @@
         El apellido es obligatorio.
       </ion-text>
 
-      <ion-input formControlName="contraseña" type="password" labelPlacement="stacked" label="Contraseña (Minimo 6 caracteres.)"></ion-input>
+      <ion-input formControlName="contraseña" type="password" labelPlacement="stacked" label="Contraseña (Minimo 8 caracteres.)"></ion-input>
       <ion-text *ngIf="persona?.get('contraseña')?.hasError('required') && persona?.get('contraseña')?.touched" color="danger">
         La contraseña es obligatoria.
       </ion-text>

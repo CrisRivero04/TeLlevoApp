@@ -34,7 +34,7 @@ export class AdministradorPage {
       rut: ['',[Validators.minLength(9),Validators.maxLength(10),Validators.required,Validators.pattern("[0-9]{7,8}-[0-9kK]{1}")]], 
       nombre: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]], 
       apellido: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]], 
-      contraseña: ['', [Validators.required, Validators.minLength(6)]],
+      contraseña: ['', [Validators.required, Validators.minLength(8)]],
       rep_contraseña: ['', Validators.required],
       fecha_nacimiento: ['', [Validators.required, this.validarEdadMinima]],
       tiene_vehiculo: ['', Validators.required],
