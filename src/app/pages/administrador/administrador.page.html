@@ -7,7 +7,7 @@
           <ion-label>
             <h2>{{ usuario.tipo }}</h2>
           </ion-label>
-          <ion-button (click)="modificarUsuario(usuario)">Modificar</ion-button>
+          <ion-button (click)="modificarUsuario(usuario)">Buscar</ion-button>
           <ion-button color="danger" (click)="eliminarUsuario(usuario.rut)">Eliminar</ion-button>
         </ion-item>
       </ion-list>
@@ -55,7 +55,8 @@
         <!-- Otros campos del formulario aquí -->
         <ion-button type="submit" size="block">{{ editando ? 'Guardar Cambios' : 'Registrar' }}</ion-button>
       </form>
-      <ion-button size="block" class="toolbar-naranja" (click)="mostrarUsuariosJson()">MOSTRAR USUARIOS (JSON)</ion-button>
+      <ion-button type="button" size="block" (click)="limpiarFormulario()">LIMPIAR</ion-button>
+      <!--ion-button size="block" class="toolbar-naranja" (click)="mostrarUsuariosJson()">MOSTRAR USUARIOS (JSON)</ion-button>-->
       
     </form>
   </ion-card>

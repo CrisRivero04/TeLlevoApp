@@ -173,4 +173,9 @@ export class AdministradorPage {
       console.log("Error! El Usuario no se ha podido crear!");
     }
   }
+
+  limpiarFormulario() {
+    this.persona.reset();  // Esto reinicia el formulario
+    this.editando = false; // Esto asegura que el botón vuelva a decir "Registrar"
+  }
 }
