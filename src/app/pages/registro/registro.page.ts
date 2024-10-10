@@ -1,28 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { AlertController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { UsuarioService } from 'src/app/services/usuario.service';
+import { Storage } from '@ionic/storage-angular';  // Importar Storage
 
 @Component({
   selector: 'app-registro',
   templateUrl: './registro.page.html',
   styleUrls: ['./registro.page.scss'],
 })
-export class RegistroPage {
+export class RegistroPage implements OnInit{
 
   persona: FormGroup;
   bienvenida: string = 'Bienvenido, por favor complete el formulario.';
   titulo: string = 'Registro de Usuario'; 
+
+  ngOnInit() {
+  }
 
   constructor(
     private formBuilder: FormBuilder,
     private alertController: AlertController,  
     private navCtrl: NavController,
     private usuarioService: UsuarioService,
-    private router: Router         
+    private router: Router,
+    private storage: Storage  // Inyectar Storage
   ) {
+    this.initStorage();  // Inicializar el storage
 
     this.persona = this.formBuilder.group({
       correo: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@duocuc\\.cl$')]],  
@@ -63,6 +69,11 @@ export class RegistroPage {
     });
   }
 
+  // Inicializar el Storage
+  async initStorage() {
+    await this.storage.create();
+  }
+
   // Validar que las contraseñas coincidan
   passwordsCoinciden(formGroup: AbstractControl) {
     const contraseña = formGroup.get('contraseña')?.value;
@@ -92,17 +103,23 @@ export class RegistroPage {
     await alert.present();
   }
 
-  // Función para registrar usuario
-  public registroUsuario(): void {
+  // Función para registrar usuario y guardarlo en Storage
+  public async registroUsuario(): Promise<void> {
     const usuarioData = { ...this.persona.value };
     usuarioData.fecha_nacimiento = moment(usuarioData.fecha_nacimiento).format('YYYY-MM-DD');
     usuarioData.tipo = 'Alumno'; 
 
-    if (this.usuarioService.createUser(usuarioData)) {
+    const usuariosExistentes = await this.storage.get('usuarios') || [];
+
+    const usuarioExistente = usuariosExistentes.find((user: any) => user.rut === usuarioData.rut);
+
+    if (!usuarioExistente) {
+      usuariosExistentes.push(usuarioData);
+      await this.storage.set('usuarios', usuariosExistentes);  // Guardar los usuarios en Storage
       console.log("El Usuario se ha creado con éxito!");
       this.mostrarAlerta();  // Muestra la alerta en pantalla
     } else {
-      console.log("Error! El Usuario no se ha podido crear!");
+      console.log("Error! El Usuario ya existe!");
     }
   }
 
@@ -151,5 +168,4 @@ export class RegistroPage {
 
     return null;
   }
-
 }

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UsuarioService } from 'src/app/services/usuario.service';
 import { AlertController } from '@ionic/angular';
-import { NavController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-recuperar',
@@ -10,7 +11,7 @@ import { NavController } from '@ionic/angular';
 })
 export class RecuperarPage implements OnInit {
   
-  constructor(private alertController: AlertController, private navCtrl: NavController) { }
+  constructor(private usuarioService: UsuarioService, private router: Router, private alertController: AlertController) { }
 
   ngOnInit() {
   }
@@ -20,34 +21,31 @@ export class RecuperarPage implements OnInit {
   correoValido: boolean = true;
   titulo: string = "Restablecer Contraseña";
 
-  async recuperar(formulario: any) {
-    if (formulario.valid && this.correoValido) {
+  async recuperar() {
+    if (await this.usuarioService.recuperarUsuario(this.correo)) {
+      // Mostrar notificación de éxito
       const alert = await this.alertController.create({
-        header: 'Solicitud Enviada',
-        message: 'Se ha enviado al correo la solicitud de cambio de contraseña.',
+        header: 'Éxito',
+        message: 'Revisa tu correo para encontrar la nueva contraseña.',
         buttons: [
           {
-            text: 'OK',
+            text: 'Aceptar',
             handler: () => {
-              // Navegar a la página de login
-              this.navCtrl.navigateRoot('/login');
+              this.router.navigate(['/login']);
             }
           }
         ]
       });
       await alert.present();
     } else {
-      // Si el correo no es válido o no sigue el formato
-      if (!this.correoValido) {
-        console.log('El correo no sigue el formato correcto.');
-      }
+      // Mostrar notificación de error
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: 'ERROR! El usuario no existe!',
+        buttons: ['Aceptar']
+      });
+      await alert.present();
     }
-  }
-
-  validarCorreo(correo: string) {
-    // Expresión regular para validar que el correo termine en @duocuc.cl
-    const regex = /^[a-zA-Z0-9._%+-]+@duocuc\.cl$/;
-    this.correoValido = regex.test(correo);
-  }
+  }  
 
 }

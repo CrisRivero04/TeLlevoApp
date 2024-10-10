@@ -1,16 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { AlertController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { UsuarioService } from 'src/app/services/usuario.service';
+import { Storage } from '@ionic/storage-angular';  // Importar Storage
 
 @Component({
   selector: 'app-administrador',
   templateUrl: './administrador.page.html',
   styleUrls: ['./administrador.page.scss'],
 })
-export class AdministradorPage {
+export class AdministradorPage implements OnInit{
 
   persona: FormGroup;
   bienvenida: string = 'Bienvenido, por favor complete el formulario.';
@@ -19,13 +20,19 @@ export class AdministradorPage {
   editando: boolean = false;  // Indicador para saber si estamos editando
   rutUsuarioAEditar: string | null = null;  // Almacena el rut del usuario que se está editando
 
+  ngOnInit() {
+    
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private alertController: AlertController,  
     private navCtrl: NavController,
     private usuarioService: UsuarioService,
-    private router: Router         
+    private router: Router,
+    private storage: Storage  // Inyectar Storage
   ) {
+    this.initStorage();  // Inicializar Storage
 
     // Inicialización del formulario
     this.persona = this.formBuilder.group({
@@ -53,7 +60,7 @@ export class AdministradorPage {
       if (value === 'si') {
         this.persona.get('marca_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
         this.persona.get('modelo_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
-        this.persona.get('cant_asientos')?.setValidators([Validators.required, Validators.min(4), Validators.max(32),Validators.pattern('^[0-9]+$')]);
+        this.persona.get('cant_asientos')?.setValidators([Validators.required, Validators.min(4), Validators.max(32), Validators.pattern('^[0-9]+$')]);
         this.persona.get('patente')?.setValidators([Validators.required, Validators.pattern('^[A-Za-z]{2}[A-Za-z]{2}[0-9]{2}$')]);
         this.persona.get('anio_inscripcion')?.setValidators([Validators.required, Validators.min(2012), Validators.max(2024)]);
       } else {
@@ -71,14 +78,19 @@ export class AdministradorPage {
     });
   }
 
-  // Cargar usuarios desde el servicio
-  cargarUsuarios() {
-    this.usuarios = this.usuarioService.obtenerUsuarios(); // Obtener la lista de usuarios
+  // Inicializar Storage
+  async initStorage() {
+    await this.storage.create();  // Inicializar el storage
   }
 
-  // Función para mostrar el JSON en la consola
-  mostrarUsuariosJson() {
-    console.log(JSON.stringify(this.usuarios, null, 2));
+  limpiarFormulario() {
+    this.persona.reset();  // Esto reinicia el formulario
+    this.editando = false; // Esto asegura que el botón vuelva a decir "Registrar"
+  }
+  // Cargar usuarios desde el almacenamiento
+  async cargarUsuarios() {
+    const storedUsers = await this.storage.get('usuarios');
+    this.usuarios = storedUsers || [];  // Obtener la lista de usuarios o inicializar vacía
   }
 
   // Validar que las contraseñas coincidan
@@ -111,24 +123,32 @@ export class AdministradorPage {
   }
 
   // Función para registrar o modificar usuario
-  guardarCambios() {
+  async guardarCambios() {
     const usuarioData = { ...this.persona.value };
     usuarioData.fecha_nacimiento = moment(usuarioData.fecha_nacimiento).format('YYYY-MM-DD'); // Formato actualizado
     usuarioData.tipo = 'Alumno'; // Asignar tipo 'Usuario'
 
+    const storedUsers = await this.storage.get('usuarios') || [];
+    
     if (this.editando) {
       // Actualizar el usuario si estamos en modo edición
-      if (this.usuarioService.updateUser(this.rutUsuarioAEditar!, usuarioData)) {
+      const index = storedUsers.findIndex((user: any) => user.rut === this.rutUsuarioAEditar);
+      if (index !== -1) {
+        storedUsers[index] = usuarioData;
+        await this.storage.set('usuarios', storedUsers); // Guardar los usuarios actualizados
         console.log("El usuario ha sido actualizado correctamente.");
       } else {
         console.log("Error al actualizar el usuario.");
       }
     } else {
       // Crear un nuevo usuario si no estamos editando
-      if (this.usuarioService.createUser(usuarioData)) {
+      const usuarioExistente = storedUsers.find((user: any) => user.rut === usuarioData.rut);
+      if (!usuarioExistente) {
+        storedUsers.push(usuarioData);
+        await this.storage.set('usuarios', storedUsers); // Guardar el nuevo usuario
         console.log("El usuario ha sido creado correctamente.");
       } else {
-        console.log("Error al crear el usuario.");
+        console.log("Error al crear el usuario. Usuario ya existe.");
       }
     }
 
@@ -147,8 +167,12 @@ export class AdministradorPage {
   }
 
   // Función para eliminar usuario
-  eliminarUsuario(rut: string) {
-    if (this.usuarioService.deleteUser(rut)) {
+  async eliminarUsuario(rut: string) {
+    const storedUsers = await this.storage.get('usuarios') || [];
+    const index = storedUsers.findIndex((user: any) => user.rut === rut);
+    if (index !== -1) {
+      storedUsers.splice(index, 1); // Eliminar el usuario
+      await this.storage.set('usuarios', storedUsers); // Guardar la nueva lista
       console.log("El usuario ha sido eliminado correctamente.");
       this.cargarUsuarios(); // Recargar la lista de usuarios
     } else {
@@ -163,27 +187,26 @@ export class AdministradorPage {
     this.rutUsuarioAEditar = null;
   }
 
-  public registroUsuario(): void {
+  public async registroUsuario(): Promise<void> {
     const usuarioData = { ...this.persona.value };
     usuarioData.fecha_nacimiento = moment(usuarioData.fecha_nacimiento).format('YYYY-MM-DD'); // Formato de fecha
     usuarioData.tipo = 'Alumno'; // Asignar tipo 'Usuario'
     
-    console.log(this.persona.value);  // Verifica los datos enviados al servicio
-    if (this.usuarioService.createUser(usuarioData)) {
+    const storedUsers = await this.storage.get('usuarios') || [];
+    const usuarioExistente = storedUsers.find((user: any) => user.rut === usuarioData.rut);
+
+    if (!usuarioExistente) {
+      storedUsers.push(usuarioData);
+      await this.storage.set('usuarios', storedUsers); // Guardar el nuevo usuario
       console.log("El Usuario se ha creado con éxito!");
       this.router.navigate(['/home']);
       this.cargarUsuarios(); // Actualiza la lista después del registro
     } else {
-      console.log("Error! El Usuario no se ha podido crear!");
+      console.log("Error! El Usuario ya existe!");
     }
   }
 
-  limpiarFormulario() {
-    this.persona.reset();  // Esto reinicia el formulario
-    this.editando = false; // Esto asegura que el botón vuelva a decir "Registrar"
-  }
-
-  // Método para calcular el dígito verificador del RUT
+  // Método para calcular el dígito verificador del RUTÑ
   calcularDigitoVerificador(rut: string): string {
     let rutLimpio = rut.replace(/\./g, '').replace(/-/g, '');
   
