@@ -103,24 +103,51 @@ export class RegistroPage implements OnInit{
     await alert.present();
   }
 
-  // Función para registrar usuario y guardarlo en Storage
   public async registroUsuario(): Promise<void> {
-    const usuarioData = { ...this.persona.value };
-    usuarioData.fecha_nacimiento = moment(usuarioData.fecha_nacimiento).format('YYYY-MM-DD');
-    usuarioData.tipo = 'Alumno'; 
+    try {
+      const usuarioData = { ...this.persona.value };
 
-    const usuariosExistentes = await this.storage.get('usuarios') || [];
-
-    const usuarioExistente = usuariosExistentes.find((user: any) => user.rut === usuarioData.rut);
-
-    if (!usuarioExistente) {
-      usuariosExistentes.push(usuarioData);
-      await this.storage.set('usuarios', usuariosExistentes);  // Guardar los usuarios en Storage
-      console.log("El Usuario se ha creado con éxito!");
-      this.mostrarAlerta();  // Muestra la alerta en pantalla
-    } else {
-      console.log("Error! El Usuario ya existe!");
+      usuarioData.fecha_nacimiento = moment(usuarioData.fecha_nacimiento).format('YYYY-MM-DD');
+      
+      if (usuarioData.tiene_vehiculo === 'si') {
+        usuarioData.tipo = 'Conductor';  
+      } else {
+        usuarioData.tipo = 'Alumno'; 
+      }
+  
+      const usuariosExistentes = await this.storage.get('usuarios') || [];
+  
+      const usuarioExistente = usuariosExistentes.find((user: any) => user.rut === usuarioData.rut);
+  
+      if (!usuarioExistente) {
+        usuariosExistentes.push(usuarioData);
+        await this.storage.set('usuarios', usuariosExistentes);  // Guardar los usuarios en Storage
+        console.log("El Usuario se ha creado con éxito!");
+  
+        this.mostrarNotificacion('Usuario creado', 'El usuario ha sido registrado con éxito.', true);
+      } else {
+        this.mostrarNotificacion('Error', 'El usuario con este RUT ya existe.', false);
+      }
+    } catch (error) {
+      console.log("Ocurrió un error durante el registro del usuario", error);
     }
+  }
+  
+  private async mostrarNotificacion(header: string, message: string, redirigir: boolean): Promise<void> {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: [{
+        text: 'OK',
+        handler: () => {
+          if (redirigir) {
+            this.navCtrl.navigateRoot('/login');
+          }
+        }
+      }]
+    });
+  
+    await alert.present();
   }
 
   // Método para calcular el dígito verificador del RUT

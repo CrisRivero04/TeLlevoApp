@@ -1,9 +1,14 @@
 <ion-header>
   <ion-toolbar class="toolbar-turquesa">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/login"></ion-back-button> 
+    <p slot="end">Bienvenido: {{usuario.nombre | titlecase}}</p>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon name="log-out"></ion-icon>
+      </ion-button> 
     </ion-buttons>
-    <ion-title>Cerrar Sesion</ion-title>
+    <ion-title>
+      Home
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -13,7 +18,7 @@
       <ion-tab-button tab="viajes">
         <ion-icon name="car-sport-outline"></ion-icon>
       </ion-tab-button>
-      <ion-tab-button tab="administrador">
+      <ion-tab-button tab="administrador" *ngIf="usuario.tipo=='Administrador'">
         <ion-icon name="business-outline"></ion-icon>
       </ion-tab-button>
       <ion-tab-button tab="perfil">
