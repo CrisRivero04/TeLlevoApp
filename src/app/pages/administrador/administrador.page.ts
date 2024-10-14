@@ -31,16 +31,16 @@ export class AdministradorPage implements OnInit {
     private storage: Storage  // Inyectar Storage
   ) {
     this.initStorage();  // Inicializar Storage
-
+  
     // Inicialización del formulario
     this.persona = this.formBuilder.group({
       correo: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@duocuc\\.cl$')]],  
       numero_celular: ['', [Validators.required, Validators.pattern('^\\+569[0-9]{8}$')]], 
       rut: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(10), this.validarRut.bind(this)]],  
-      nombre: ['', [Validators.required, Validators.pattern("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")]], 
-      apellido: ['', [Validators.required, Validators.pattern("^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$")]], 
-      contraseña: ['',[Validators.required, Validators.pattern("^(?=.*[-!#$%&/()?¡_.])(?=.*[A-Za-z])(?=.*[a-z]).{8,}$")]],
-      rep_contraseña: ['',[Validators.required, Validators.pattern("^(?=.*[-!#$%&/()?¡_.])(?=.*[A-Za-z])(?=.*[a-z]).{8,}$")]],
+      nombre: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]], 
+      apellido: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]], 
+      contraseña: ['', [Validators.required, Validators.minLength(8)]],
+      rep_contraseña: ['', Validators.required],
       fecha_nacimiento: ['', [Validators.required, this.validarEdadMinima]],
       tiene_vehiculo: ['', Validators.required],
       marca_vehiculo: [''],
@@ -49,27 +49,36 @@ export class AdministradorPage implements OnInit {
       patente: [''],
       anio_inscripcion: ['']
     }, { validators: this.passwordsCoinciden });
-
+  
     // Cargar lista de usuarios
     this.cargarUsuarios();
-
+  
     // Validación dinámica de los campos de vehículo y ajuste de tipo de usuario
     this.persona.get('tiene_vehiculo')?.valueChanges.subscribe(value => {
       if (value === 'si') {
+        // Si el usuario tiene vehículo, activamos las validaciones
         this.persona.get('marca_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
         this.persona.get('modelo_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
         this.persona.get('cant_asientos')?.setValidators([Validators.required, Validators.min(4), Validators.max(32), Validators.pattern('^[0-9]+$')]);
         this.persona.get('patente')?.setValidators([Validators.required, Validators.pattern('^[A-Za-z]{2}[A-Za-z]{2}[0-9]{2}$')]);
         this.persona.get('anio_inscripcion')?.setValidators([Validators.required, Validators.min(2012), Validators.max(2024)]);
       } else {
+        // Si el usuario no tiene vehículo, limpiamos los campos y removemos las validaciones
         this.persona.get('marca_vehiculo')?.clearValidators();
         this.persona.get('modelo_vehiculo')?.clearValidators();
         this.persona.get('cant_asientos')?.clearValidators();
         this.persona.get('patente')?.clearValidators();
         this.persona.get('anio_inscripcion')?.clearValidators();
+  
+        // Limpiar los valores de los campos relacionados con el vehículo
+        this.persona.get('marca_vehiculo')?.setValue('');
+        this.persona.get('modelo_vehiculo')?.setValue('');
+        this.persona.get('cant_asientos')?.setValue('');
+        this.persona.get('patente')?.setValue('');
+        this.persona.get('anio_inscripcion')?.setValue('');
       }
-
-      // Actualizar validadores
+  
+      // Actualizar validaciones y valores
       this.persona.get('marca_vehiculo')?.updateValueAndValidity();
       this.persona.get('modelo_vehiculo')?.updateValueAndValidity();
       this.persona.get('cant_asientos')?.updateValueAndValidity();
@@ -77,6 +86,7 @@ export class AdministradorPage implements OnInit {
       this.persona.get('anio_inscripcion')?.updateValueAndValidity();
     });
   }
+  
 
   // Inicializar Storage
   async initStorage() {
