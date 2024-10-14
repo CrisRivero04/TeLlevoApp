@@ -11,7 +11,7 @@ import { Storage } from '@ionic/storage-angular';  // Importar Storage
   templateUrl: './administrador.page.html',
   styleUrls: ['./administrador.page.scss'],
 })
-export class AdministradorPage implements OnInit{
+export class AdministradorPage implements OnInit {
 
   persona: FormGroup;
   bienvenida: string = 'Bienvenido, por favor complete el formulario.';
@@ -20,9 +20,7 @@ export class AdministradorPage implements OnInit{
   editando: boolean = false;  // Indicador para saber si estamos editando
   rutUsuarioAEditar: string | null = null;  // Almacena el rut del usuario que se está editando
 
-  ngOnInit() {
-    
-  }
+  ngOnInit() {}
 
   constructor(
     private formBuilder: FormBuilder,
@@ -55,7 +53,7 @@ export class AdministradorPage implements OnInit{
     // Cargar lista de usuarios
     this.cargarUsuarios();
 
-    // Validación dinámica de los campos de vehículo
+    // Validación dinámica de los campos de vehículo y ajuste de tipo de usuario
     this.persona.get('tiene_vehiculo')?.valueChanges.subscribe(value => {
       if (value === 'si') {
         this.persona.get('marca_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
@@ -70,6 +68,8 @@ export class AdministradorPage implements OnInit{
         this.persona.get('patente')?.clearValidators();
         this.persona.get('anio_inscripcion')?.clearValidators();
       }
+
+      // Actualizar validadores
       this.persona.get('marca_vehiculo')?.updateValueAndValidity();
       this.persona.get('modelo_vehiculo')?.updateValueAndValidity();
       this.persona.get('cant_asientos')?.updateValueAndValidity();
@@ -87,6 +87,7 @@ export class AdministradorPage implements OnInit{
     this.persona.reset();  // Esto reinicia el formulario
     this.editando = false; // Esto asegura que el botón vuelva a decir "Registrar"
   }
+
   // Cargar usuarios desde el almacenamiento
   async cargarUsuarios() {
     const storedUsers = await this.storage.get('usuarios');
@@ -126,7 +127,7 @@ export class AdministradorPage implements OnInit{
   async guardarCambios() {
     const usuarioData = { ...this.persona.value };
     usuarioData.fecha_nacimiento = moment(usuarioData.fecha_nacimiento).format('YYYY-MM-DD'); // Formato actualizado
-    usuarioData.tipo = 'Alumno'; // Asignar tipo 'Usuario'
+    usuarioData.tipo = this.persona.get('tiene_vehiculo')?.value === 'si' ? 'Conductor' : 'Alumno'; // Asignar tipo dinámicamente
 
     const storedUsers = await this.storage.get('usuarios') || [];
     
@@ -144,9 +145,10 @@ export class AdministradorPage implements OnInit{
       // Crear un nuevo usuario si no estamos editando
       const usuarioExistente = storedUsers.find((user: any) => user.rut === usuarioData.rut);
       if (!usuarioExistente) {
-        storedUsers.push(usuarioData);
-        await this.storage.set('usuarios', storedUsers); // Guardar el nuevo usuario
-        console.log("El usuario ha sido creado correctamente.");
+        storedUsers.push(usuarioData); // Agregar nuevo usuario
+        await this.storage.set('usuarios', storedUsers); // Guardar la lista actualizada de usuarios en el almacenamiento
+        console.log("El Usuario se ha creado con éxito!");
+        await this.mostrarNotificacionUsuarioCreado();  // Mostrar notificación sin redirigir
       } else {
         console.log("Error al crear el usuario. Usuario ya existe.");
       }
@@ -155,6 +157,36 @@ export class AdministradorPage implements OnInit{
     // Resetear el formulario y el estado de edición
     this.resetFormulario();
     this.cargarUsuarios();  // Recargar la lista de usuarios
+  }
+
+  public async registroUsuario(): Promise<void> {
+    const usuarioData = { ...this.persona.value };
+    usuarioData.fecha_nacimiento = moment(usuarioData.fecha_nacimiento).format('YYYY-MM-DD'); // Formato de fecha
+    
+    // Ajuste dinámico del tipo de usuario según si tiene vehículo
+    usuarioData.tipo = this.persona.get('tiene_vehiculo')?.value === 'si' ? 'Conductor' : 'Alumno'; 
+    
+    const storedUsers = await this.storage.get('usuarios') || []; // Obtener usuarios del almacenamiento
+    const usuarioExistente = storedUsers.find((user: any) => user.rut === usuarioData.rut);
+
+    if (!usuarioExistente) {
+        storedUsers.push(usuarioData); // Agregar nuevo usuario
+        await this.storage.set('usuarios', storedUsers); // Guardar la lista actualizada de usuarios en el almacenamiento
+        console.log("El Usuario se ha creado con éxito!");
+        await this.mostrarNotificacionUsuarioCreado();  // Mostrar notificación sin redirigir
+        this.cargarUsuarios(); // Actualiza la lista de usuarios después del registro
+    } else {
+        console.log("Error! El Usuario ya existe!");
+    }
+  }
+
+  async mostrarNotificacionUsuarioCreado() {
+    const alert = await this.alertController.create({
+      header: 'Usuario Creado',
+      message: 'La cuenta se ha creado correctamente.',
+      buttons: ['OK'] // Mantiene en la misma página después de aceptar
+    });
+    await alert.present();
   }
 
   // Prellenar el formulario con los datos del usuario a modificar
@@ -187,26 +219,7 @@ export class AdministradorPage implements OnInit{
     this.rutUsuarioAEditar = null;
   }
 
-  public async registroUsuario(): Promise<void> {
-    const usuarioData = { ...this.persona.value };
-    usuarioData.fecha_nacimiento = moment(usuarioData.fecha_nacimiento).format('YYYY-MM-DD'); // Formato de fecha
-    usuarioData.tipo = 'Alumno'; // Asignar tipo 'Usuario'
-    
-    const storedUsers = await this.storage.get('usuarios') || [];
-    const usuarioExistente = storedUsers.find((user: any) => user.rut === usuarioData.rut);
-
-    if (!usuarioExistente) {
-      storedUsers.push(usuarioData);
-      await this.storage.set('usuarios', storedUsers); // Guardar el nuevo usuario
-      console.log("El Usuario se ha creado con éxito!");
-      this.router.navigate(['/home']);
-      this.cargarUsuarios(); // Actualiza la lista después del registro
-    } else {
-      console.log("Error! El Usuario ya existe!");
-    }
-  }
-
-  // Método para calcular el dígito verificador del RUTÑ
+  // Método para calcular el dígito verificador del RUT
   calcularDigitoVerificador(rut: string): string {
     let rutLimpio = rut.replace(/\./g, '').replace(/-/g, '');
   
