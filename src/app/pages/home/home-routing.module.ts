@@ -18,6 +18,17 @@ const routes: Routes = [
       {
         path: 'viajes',
         loadChildren: () => import('../viajes/viajes.module').then( m => m.ViajesPageModule)
+      },{
+        path: 'generar-viaje',
+        loadChildren: () => import('../generar-viaje/generar-viaje.module').then( m => m.GenerarViajePageModule)
+      },
+      {
+        path: 'listar-viajes',
+        loadChildren: () => import('../listar-viajes/listar-viajes.module').then( m => m.ListarViajesPageModule)
+      },
+      {
+        path: 'tomar-viaje',
+        loadChildren: () => import('../tomar-viaje/tomar-viaje.module').then( m => m.TomarViajePageModule)
       },
     ]
   }
