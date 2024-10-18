@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { GenerarViajePageRoutingModule } from './generar-viaje-routing.module';
+import { TomarTrabajoPageRoutingModule } from './tomar-trabajo-routing.module';
 
-import { GenerarViajePage } from './generar-viaje.page';
+import { TomarTrabajoPage } from './tomar-trabajo.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    GenerarViajePageRoutingModule
+    TomarTrabajoPageRoutingModule
   ],
-  declarations: [GenerarViajePage]
+  declarations: [TomarTrabajoPage]
 })
-export class GenerarViajePageModule {}
+export class TomarTrabajoPageModule {}
