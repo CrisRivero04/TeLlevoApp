@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 //lo primero es agregar un import:
 import * as L from 'leaflet';
 import * as G from 'leaflet-control-geocoder';
 import 'leaflet-routing-machine';
+import { ViajeService } from 'src/app/services/viaje.service';
 
 @Component({
   selector: 'app-viajes',
@@ -11,6 +13,16 @@ import 'leaflet-routing-machine';
   styleUrls: ['./viajes.page.scss'],
 })
 export class ViajesPage implements OnInit {
+
+  viaje = new FormGroup({
+    id: new FormControl('',[Validators.required]),
+    latitud: new FormControl('', [Validators.required]),
+    longitud: new FormControl('', [Validators.required]),
+    direccion: new FormControl('', [Validators.required]),
+    distancia_metros: new FormControl('', [Validators.required]),
+    pasajeros: new FormControl('', [Validators.required]),
+
+  });
 
   //vamos a crear variable(s) para controlar el mapa:
   private map: L.Map | undefined;
@@ -69,10 +81,17 @@ export class ViajesPage implements OnInit {
     }
   ];
 
-  constructor() { }
+  constructor(private viajeService: ViajeService) { }
 
   ngOnInit() {
     this.initMap();
+  }
+
+  async registroViaje(){
+    if (await this.viajeService.createViaje(this.viaje.value)){
+      alert("Viaje creado")
+    }
+    alert("ERROR! viaje no creado")
   }
 
   initMap(){
@@ -113,7 +132,7 @@ export class ViajesPage implements OnInit {
 
       if(this.map){
         L.Routing.control({
-          waypoints: [L.latLng(-33.611316, -70.575737),
+          waypoints: [L.latLng(-33.59837122676798, -70.57877634597855),
                       L.latLng(this.latitud,this.longitud)],
           fitSelectedRoutes: true,
         }).on('routesfound', (e)=>{
