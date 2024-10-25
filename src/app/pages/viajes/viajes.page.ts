@@ -30,6 +30,7 @@ export class ViajesPage implements OnInit {
   });
 
   //vamos a crear variable(s) para controlar el mapa:
+  usuario: any;
   private map: L.Map | undefined;
   private geocoder: G.Geocoder | undefined;
   latitud: number = 0;
@@ -88,8 +89,11 @@ export class ViajesPage implements OnInit {
 
   constructor(private viajeService: ViajeService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.initMap();
+    this.usuario = JSON.parse(localStorage.getItem("usuario") || '');
+    this.viaje.controls.conductor.setValue(this.usuario.nombre);
+    await this.rescatarViajes();
   }
 //aqui creamos el viaje:
   async crearViaje(){
@@ -131,7 +135,7 @@ export class ViajesPage implements OnInit {
     this.geocoder.on('markgeocode', (e)=>{
       this.latitud = e.geocode.properties['lat'];
       this.longitud = e.geocode.properties['lon'];
-      this.direccion = e.geocode.properties['display_name'];
+      this.viaje.controls.nombre_destino.setValue(e.geocode.properties['display_name']);
 
       //le vamos a agregar un radio a la busqueda.
       var circulo = L.circle([this.latitud, this.longitud],{
@@ -147,8 +151,8 @@ export class ViajesPage implements OnInit {
                       L.latLng(this.latitud,this.longitud)],
           fitSelectedRoutes: true,
         }).on('routesfound', (e)=>{
-          this.distancia_metros = e.routes[0].summary.totalDistance;
-          this.tiempo_segundos = e.routes[0].summary.totalTime;
+          this.viaje.controls.distancia_metros.setValue(e.routes[0].summary.totalDistance);
+          this.viaje.controls.tiempo_minutos.setValue(Math.round(e.routes[0].summary.totalTime/60));
         }).addTo(this.map);
       }
     });

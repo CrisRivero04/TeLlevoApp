@@ -20,7 +20,7 @@
         </div>
       </ion-accordion>
 
-      <ion-accordion value="crear_viaje">
+      <ion-accordion value="crear_viaje" (click)="initMap()" *ngIf="usuario.tiene_vehiculo=='si'">
         <ion-item slot="header" color="light">
           <ion-label>Crear viaje</ion-label>
         </ion-item>
@@ -35,7 +35,7 @@
             <ion-input labelPlacement="stacked" label="Destino" formControlName="nombre_destino"></ion-input>
             <ion-input labelPlacement="stacked" label="Distancia (metros)" formControlName="distancia_metros"></ion-input>
             <ion-input type="number" labelPlacement="stacked" label="Minutos" formControlName="tiempo_minutos"></ion-input>
-            <ion-button [disabled]="viaje.invalid" type="submit" size="block">Crear viaje</ion-button>
+            <ion-button type="submit" size="block">Crear viaje</ion-button>
           </form>
         </div>
       </ion-accordion>
