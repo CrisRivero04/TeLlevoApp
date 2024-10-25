@@ -1,4 +1,5 @@
 <ion-content>
+  
   <ion-accordion-group>
       <ion-accordion value="Viajes">
         <ion-item slot="header" color="light">
@@ -16,6 +17,26 @@
               </ion-card-content>
               <ion-button routerLink="/home/viajes/detalle-reserva/{{v.id}}" size="block" [disabled]="v.asientos_disponibles == 0">Ver detalle</ion-button>
           </ion-card>
+        </div>
+      </ion-accordion>
+
+      <ion-accordion value="crear_viaje">
+        <ion-item slot="header" color="light">
+          <ion-label>Crear viaje</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content">
+          <!--ponemos el mapa-->
+          <div id="map_html"></div>
+
+          <!--ponemos del formulario para crear el viaje-->
+          <form [formGroup]="viaje" (ngSubmit)="crearViaje()">
+            <ion-input type="number" labelPlacement="stacked" label="Asientos disp." formControlName="asientos_disp"></ion-input>
+            <ion-input type="number" labelPlacement="stacked" label="Valor" formControlName="valor"></ion-input>
+            <ion-input labelPlacement="stacked" label="Destino" formControlName="nombre_destino"></ion-input>
+            <ion-input labelPlacement="stacked" label="Distancia (metros)" formControlName="distancia_metros"></ion-input>
+            <ion-input type="number" labelPlacement="stacked" label="Minutos" formControlName="tiempo_minutos"></ion-input>
+            <ion-button [disabled]="viaje.invalid" type="submit" size="block">Crear viaje</ion-button>
+          </form>
         </div>
       </ion-accordion>
     </ion-accordion-group>

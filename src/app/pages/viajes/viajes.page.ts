@@ -14,14 +14,19 @@ import { ViajeService } from 'src/app/services/viaje.service';
 })
 export class ViajesPage implements OnInit {
 
+  //variables del grupo:
   viaje = new FormGroup({
     id: new FormControl('',[Validators.required]),
-    latitud: new FormControl('', [Validators.required]),
-    longitud: new FormControl('', [Validators.required]),
-    direccion: new FormControl('', [Validators.required]),
-    distancia_metros: new FormControl('', [Validators.required]),
-    pasajeros: new FormControl('', [Validators.required]),
-
+    conductor: new FormControl('',[Validators.required]),
+    asientos_disp: new FormControl('',[Validators.required]),
+    valor: new FormControl('',[Validators.required]),
+    nombre_destino: new FormControl('',[Validators.required]),
+    latitud: new FormControl('',[Validators.required]),
+    longitud: new FormControl('',[Validators.required]),
+    distancia_metros: new FormControl('',[Validators.required]),
+    tiempo_minutos: new FormControl(0,[Validators.required]),
+    estado_viaje: new FormControl('pendiente'),
+    pasajeros: new FormControl([])
   });
 
   //vamos a crear variable(s) para controlar el mapa:
@@ -86,12 +91,18 @@ export class ViajesPage implements OnInit {
   ngOnInit() {
     this.initMap();
   }
-
-  async registroViaje(){
+//aqui creamos el viaje:
+  async crearViaje(){
     if (await this.viajeService.createViaje(this.viaje.value)){
-      alert("Viaje creado")
+      alert("Viaje creado");
+      this.viaje.reset();
+      await this.rescatarViajes();
     }
-    alert("ERROR! viaje no creado")
+  }
+
+  //aqui rescatamos el viaje:
+  async rescatarViajes(){
+    this.viajes = await this.viajeService.getViajes();
   }
 
   initMap(){

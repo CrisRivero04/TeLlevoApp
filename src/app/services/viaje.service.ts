@@ -55,4 +55,14 @@ export class ViajeService {
     return await this.storage.get('viajes');
   }
 
+  public async getViaje(id: string): Promise<any>{
+    let viajes: any[] = await this.storage.get("viajes") || [];
+    return viajes.find(v => v.id==id);
+  }
+  
+  public async getViajes(): Promise<any[]>{
+    let viajes: any[] = await this.storage.get("viajes") || [];
+    return viajes;
+  }
+
 }
