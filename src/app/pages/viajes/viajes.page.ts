@@ -16,7 +16,7 @@ export class ViajesPage implements OnInit {
 
   //variables del grupo:
   viaje = new FormGroup({
-    id: new FormControl('',[Validators.required]),
+    id: new FormControl('',[]),
     conductor: new FormControl('',[Validators.required]),
     asientos_disp: new FormControl('',[Validators.required]),
     valor: new FormControl('',[Validators.required]),
@@ -100,7 +100,6 @@ export class ViajesPage implements OnInit {
     if (await this.viajeService.createViaje(this.viaje.value)){
       alert("Viaje creado");
       this.viaje.reset();
-      await this.rescatarViajes();
     }
   }
 
@@ -109,54 +108,66 @@ export class ViajesPage implements OnInit {
     this.viajes = await this.viajeService.getViajes();
   }
 
-  initMap(){
-    //ACA CARGAMOS E INICIALIZAMOS EL MAPA:
-    this.map = L.map("map_html").locate({setView:true, maxZoom:16});
-    //this.map = L.map("map_html").setView([-33.608552227594245, -70.58039819211703],16);
-    
-    //ES LA PLANTILLA PARA QUE SEA VEA EL MAPA:
+  initMap() {
+    // Verificar si el mapa ya está inicializado y destruirlo si es necesario
+    if (this.map) {
+      this.map.off();
+      this.map.remove();
+    }
+  
+    // Inicializar el mapa en el contenedor con id "map_html" con una vista predeterminada
+    this.map = L.map("map_html").setView([-33.59837122676798, -70.57877634597855], 16);
+  
+    // Configurar la capa de mosaico para el mapa
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(this.map);
-
-    this.map.on('locationfound', (e)=>{
+  
+    // Agregar el evento para la ubicación del usuario
+    this.map.on('locationfound', (e) => {
       console.log(e.latlng.lat);
       console.log(e.latlng.lng);
     });
-
-    //VAMOS A AGREGAR UN BUSCADOR DE DIRECCIONES EN EL MAPA:
+  
+    // Activar el seguimiento de ubicación del usuario cuando el mapa esté listo
+    this.map.locate({ setView: true, maxZoom: 16 });
+  
+    // Agregar el buscador de direcciones al mapa
     this.geocoder = G.geocoder({
       placeholder: "Ingrese dirección a buscar",
       errorMessage: "Dirección no encontrada"
     }).addTo(this.map);
-
-    //VAMOS A REALIZAR UNA ACCIÓN CON EL BUSCADOR, CUANDO OCURRA ALGO CON EL BUSCADOR:
-    this.geocoder.on('markgeocode', (e)=>{
+  
+    // Configurar la acción que ocurre cuando se encuentra una dirección
+    this.geocoder.on('markgeocode', (e) => {
       this.latitud = e.geocode.properties['lat'];
       this.longitud = e.geocode.properties['lon'];
       this.viaje.controls.nombre_destino.setValue(e.geocode.properties['display_name']);
-
-      //le vamos a agregar un radio a la busqueda.
-      var circulo = L.circle([this.latitud, this.longitud],{
+  
+      // Añadir un círculo para indicar el radio de la búsqueda
+      var circulo = L.circle([this.latitud, this.longitud], {
         color: 'red',
         fillColor: '#f03',
         fillOpacity: 0.5,
         radius: 500
       }).addTo(this.map!);
-
-      if(this.map){
+  
+      // Agregar la ruta desde el origen hasta el destino seleccionado
+      if (this.map) {
         L.Routing.control({
-          waypoints: [L.latLng(-33.59837122676798, -70.57877634597855),
-                      L.latLng(this.latitud,this.longitud)],
+          waypoints: [
+            L.latLng(-33.59837122676798, -70.57877634597855),
+            L.latLng(this.latitud, this.longitud)
+          ],
           fitSelectedRoutes: true,
-        }).on('routesfound', (e)=>{
+        }).on('routesfound', (e) => {
           this.viaje.controls.distancia_metros.setValue(e.routes[0].summary.totalDistance);
-          this.viaje.controls.tiempo_minutos.setValue(Math.round(e.routes[0].summary.totalTime/60));
+          this.viaje.controls.tiempo_minutos.setValue(Math.round(e.routes[0].summary.totalTime / 60));
         }).addTo(this.map);
       }
     });
-
   }
+  
 
 }

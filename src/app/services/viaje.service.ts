@@ -17,7 +17,7 @@ export class ViajeService {
   public async createViaje(viaje: any): Promise<boolean> {
     if (this.obtenerViaje(viaje.id) === undefined) {
       this.viajes.push(viaje);
-      await this._storage?.set('viajes', this.viajes);
+      await this.storage.set('viajes', viaje);
       return true;
     }
     return false;
