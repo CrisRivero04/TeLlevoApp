@@ -110,67 +110,47 @@ export class ViajesPage implements OnInit {
     this.viajes = await this.viajeService.getViajes();
   }
 
-  initMap() {
-    // Verificar si el mapa ya está inicializado y destruirlo si es necesario
-    if (this.map) {
-      this.map.off();
-      this.map.remove();
+  initMap(){
+    try {
+      //ACA CARGAMOS E INICIALIZAMOS EL MAPA:
+      this.map = L.map("map_html").locate({setView:true, maxZoom:16});
+      //this.map = L.map("map_html").setView([-33.608552227594245, -70.58039819211703],16);
+      
+      //ES LA PLANTILLA PARA QUE SEA VEA EL MAPA:
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(this.map);
+  
+      //VAMOS A AGREGAR UN BUSCADOR DE DIRECCIONES EN EL MAPA:
+      this.geocoder = G.geocoder({
+        placeholder: "Ingrese dirección a buscar",
+        errorMessage: "Dirección no encontrada"
+      }).addTo(this.map);
+  
+      //VAMOS A REALIZAR UNA ACCIÓN CON EL BUSCADOR, CUANDO OCURRA ALGO CON EL BUSCADOR:
+      this.geocoder.on('markgeocode', (e)=>{
+        //cargo el formulario:
+        let lat = e.geocode.properties['lat'];
+        let lon = e.geocode.properties['lon'];
+        this.viaje.controls.nombre_destino.setValue(e.geocode.properties['display_name']);
+        
+        this.viaje.controls.latitud.setValue(lat);
+        this.viaje.controls.longitud.setValue(lon);
+        
+        if(this.map){
+          L.Routing.control({
+            waypoints: [L.latLng(-33.608552227594245, -70.58039819211703),
+              L.latLng(lat,lon)],
+              fitSelectedRoutes: true,
+            }).on('routesfound', (e)=>{
+              this.viaje.controls.distancia_metros.setValue(e.routes[0].summary.totalDistance);
+              this.viaje.controls.tiempo_minutos.setValue(Math.round(e.routes[0].summary.totalTime/60));
+          }).addTo(this.map);
+        }
+      });
+    } catch (error) {
     }
-  
-    // Inicializar el mapa en el contenedor con id "map_html" con una vista predeterminada
-    this.map = L.map("map_html").setView([-33.59837122676798, -70.57877634597855], 16);
-  
-    // Configurar la capa de mosaico para el mapa
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(this.map);
-  
-    // Agregar el evento para la ubicación del usuario
-    this.map.on('locationfound', (e) => {
-      console.log(e.latlng.lat);
-      console.log(e.latlng.lng);
-    });
-  
-    // Activar el seguimiento de ubicación del usuario cuando el mapa esté listo
-    this.map.locate({ setView: true, maxZoom: 16 });
-  
-    // Agregar el buscador de direcciones al mapa
-    this.geocoder = G.geocoder({
-      placeholder: "Ingrese dirección a buscar",
-      errorMessage: "Dirección no encontrada"
-    }).addTo(this.map);
-  
-    // Configurar la acción que ocurre cuando se encuentra una dirección
-    this.geocoder.on('markgeocode', (e) => {
-      let lat = e.geocode.properties['lat'];
-      let lon = e.geocode.properties['lon'];
-      this.viaje.controls.nombre_destino.setValue(e.geocode.properties['display_name']);
-      this.viaje.controls.latitud.setValue(lat);
-      this.viaje.controls.longitud.setValue(lon);
-  
-      // Añadir un círculo para indicar el radio de la búsqueda
-      var circulo = L.circle([this.latitud, this.longitud], {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.5,
-        radius: 500
-      }).addTo(this.map!);
-  
-      // Agregar la ruta desde el origen hasta el destino seleccionado
-      if (this.map) {
-        L.Routing.control({
-          waypoints: [
-            L.latLng(-33.59837122676798, -70.57877634597855),
-            L.latLng(this.latitud, this.longitud)
-          ],
-          fitSelectedRoutes: true,
-        }).on('routesfound', (e) => {
-          this.viaje.controls.distancia_metros.setValue(e.routes[0].summary.totalDistance);
-          this.viaje.controls.tiempo_minutos.setValue(Math.round(e.routes[0].summary.totalTime / 60));
-        }).addTo(this.map);
-      }
-    });
   }
   
 
