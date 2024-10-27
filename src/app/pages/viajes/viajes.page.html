@@ -12,15 +12,15 @@
                   <ion-card-subtitle>{{v.estado_viaje}}</ion-card-subtitle>
               </ion-card-header>
               <ion-card-content>
-                  <p>Asientos disponibles: {{v.asientos_disponibles}}</p>
-                  <p>Precio: {{v.distancia_metros/200 * 100 | currency:'CLP'}}</p>
+                  <p>Asientos disponibles: {{v.asientos_disp}}</p>
+                  <p>Precio: {{v.valor/200 * 100 | currency:'CLP'}}</p>
               </ion-card-content>
               <ion-button routerLink="/home/viajes/detalle-reserva/{{v.id}}" size="block" [disabled]="v.asientos_disponibles == 0">Ver detalle</ion-button>
           </ion-card>
         </div>
       </ion-accordion>
 
-      <ion-accordion value="crear_viaje" (click)="initMap()" *ngIf="usuario.tiene_vehiculo=='si'">
+      <ion-accordion value="crear_viaje" *ngIf="usuario.tiene_vehiculo=='si'">
         <ion-item slot="header" color="light">
           <ion-label>Crear viaje</ion-label>
         </ion-item>
@@ -30,6 +30,7 @@
 
           <!--ponemos del formulario para crear el viaje-->
           <form [formGroup]="viaje" (ngSubmit)="crearViaje()">
+            <ion-input type="number" labelPlacement="stacked" label="id" formControlName="id"></ion-input>
             <ion-input type="number" labelPlacement="stacked" label="Asientos disp." formControlName="asientos_disp"></ion-input>
             <ion-input type="number" labelPlacement="stacked" label="Valor" formControlName="valor"></ion-input>
             <ion-input labelPlacement="stacked" label="Destino" formControlName="nombre_destino"></ion-input>

@@ -95,13 +95,15 @@ export class ViajesPage implements OnInit {
     this.viaje.controls.conductor.setValue(this.usuario.nombre);
     await this.rescatarViajes();
   }
-//aqui creamos el viaje:
+
   async crearViaje(){
-    if (await this.viajeService.createViaje(this.viaje.value)){
-      alert("Viaje creado");
+    if(await this.viajeService.createViaje(this.viaje.value)){
+      alert("VIAJE CREADO!");
       this.viaje.reset();
+      await this.rescatarViajes();
     }
   }
+
 
   //aqui rescatamos el viaje:
   async rescatarViajes(){

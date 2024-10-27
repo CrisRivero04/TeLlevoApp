@@ -10,17 +10,21 @@ export class ViajeService {
   viajes: any[] = [];
 
   constructor(private storage: Storage) {
-
+    this.init();
   }
 
-  // Crear un nuevo viaje y guardar en el almacenamiento
-  public async createViaje(viaje: any): Promise<boolean> {
-    if (this.obtenerViaje(viaje.id) === undefined) {
-      this.viajes.push(viaje);
-      await this.storage.set('viajes', viaje);
-      return true;
+  async init(){
+    await this.storage.create();
+  }
+
+  public async createViaje(viaje: any): Promise<boolean>{
+    let viajes: any[] = await this.storage.get("viajes") || [];
+    if(viajes.find(v => v.id==viaje.id)!=undefined){
+      return false;
     }
-    return false;
+    viajes.push(viaje);
+    await this.storage.set("viajes",viajes);
+    return true;
   }
 
   // Actualizar un viaje y guardar en el almacenamiento
