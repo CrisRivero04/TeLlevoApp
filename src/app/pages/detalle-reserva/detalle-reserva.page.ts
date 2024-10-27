@@ -64,13 +64,16 @@ export class DetalleReservaPage implements OnInit {
     }).addTo(this.map);
   }
 
-  async tomar_viaje(){
+  async tomar_viaje() {
     var usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    console.log("Usuario en localStorage:", usuario);
+  
     var pasajero = {
       "rut": usuario.rut,
       "nombre": usuario.nombre,
       "correo": usuario.correo
-    }
+    };
+  
     if(await this.viajeService.updateViaje(this.id, pasajero)){
       alert("Viaje tomado con éxito!");
       this.navController.navigateRoot("/home/reservas");

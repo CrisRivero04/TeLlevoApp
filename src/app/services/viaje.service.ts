@@ -28,15 +28,20 @@ export class ViajeService {
   }
 
   // Actualizar un viaje y guardar en el almacenamiento
-  public async updateViaje(id: string, newViaje: any): Promise<boolean> {
-    const indice = this.viajes.findIndex(via => via.id === id);
-    if (indice === -1) {
+  public async updateViaje(id: string, pasajero: any): Promise<boolean>{
+    let viajes: any[] = await this.storage.get("viajes") || [];
+    let indice: number = viajes.findIndex(v => v.id==id);
+    if(indice==-1){
       return false;
     }
-    this.viajes[indice] = newViaje;
-    await this._storage?.set('viajes', this.viajes);
+    if(viajes[indice].pasajeros.find((pasajero: any) => pasajero.rut == pasajero.rut)){
+      return false;
+    }
+    viajes[indice].pasajeros.push(pasajero);
+    viajes[indice].asientos_disp = viajes[indice].asientos_disp - 1;
+    await this.storage.set("viajes",viajes);
     return true;
-  }
+  } 
 
   // Eliminar un viaje y actualizar el almacenamiento
   public async deleteViaje(id: number): Promise<boolean> {
