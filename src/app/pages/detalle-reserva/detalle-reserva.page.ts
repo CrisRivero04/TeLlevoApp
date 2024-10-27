@@ -76,7 +76,7 @@ export class DetalleReservaPage implements OnInit {
   
     if(await this.viajeService.updateViaje(this.id, pasajero)){
       alert("Viaje tomado con éxito!");
-      this.navController.navigateRoot("/home/reservas");
+      this.navController.navigateRoot("/home");
     }else{
       alert("ERROR! ya eres pasajero!");
     }
