@@ -28,7 +28,7 @@ export class ViajeService {
   }
 
   // Actualizar un viaje y guardar en el almacenamiento
-  public async updateViaje(id: number, newViaje: any): Promise<boolean> {
+  public async updateViaje(id: string, newViaje: any): Promise<boolean> {
     const indice = this.viajes.findIndex(via => via.id === id);
     if (indice === -1) {
       return false;
