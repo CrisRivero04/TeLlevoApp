@@ -143,9 +143,11 @@ export class ViajesPage implements OnInit {
   
     // Configurar la acción que ocurre cuando se encuentra una dirección
     this.geocoder.on('markgeocode', (e) => {
-      this.latitud = e.geocode.properties['lat'];
-      this.longitud = e.geocode.properties['lon'];
+      let lat = e.geocode.properties['lat'];
+      let lon = e.geocode.properties['lon'];
       this.viaje.controls.nombre_destino.setValue(e.geocode.properties['display_name']);
+      this.viaje.controls.latitud.setValue(lat);
+      this.viaje.controls.longitud.setValue(lon);
   
       // Añadir un círculo para indicar el radio de la búsqueda
       var circulo = L.circle([this.latitud, this.longitud], {

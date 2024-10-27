@@ -1,20 +1,16 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
     <ion-title>Detalle del viaje</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">detalle viaje</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
-
 <ion-content>
   <ion-card>
-    <div id="map_detalle"></div>
+    <!-- Contenedor del mapa con estilo para asegurar visibilidad -->
+    <div id="map_html" style="height: 300px;"></div>
     <ion-card-header>
       <ion-card-title>{{viaje.nombre_destino}}</ion-card-title>
       <ion-card-subtitle>Valor: {{viaje.valor | currency}}</ion-card-subtitle>
