@@ -24,8 +24,8 @@ const routes: Routes = [
         loadChildren: () => import('../listar-viajes/listar-viajes.module').then( m => m.ListarViajesPageModule)
       },
       {
-        path: 'tomar-trabajo',
-        loadChildren: () => import('../tomar-trabajo/tomar-trabajo.module').then( m => m.TomarTrabajoPageModule)
+        path: 'administrar-viaje',
+        loadChildren: () => import('../administrar-viaje/administrar-viaje.module').then( m => m.AdministrarViajePageModule)
       },
     ]
   }
