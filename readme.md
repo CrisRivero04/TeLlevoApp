@@ -38,25 +38,47 @@ Sigue estos pasos para configurar el proyecto en tu entorno local:
 
 bash
 Copiar código:
-git clone https://github.com/tuusuario/TeLlevoAPP.git
+- `git clone https://github.com/tuusuario/TeLlevoAPP.git`
 
 2. Navega al directorio del proyecto:
 
 bash
 Copiar código:
-cd TeLlevoAPP
+- `cd TeLlevoAPP`
 
 3. Instala las dependencias necesarias:
 
 bash
 Copiar código:
-npm install
+- `npm install`
 
 4. Inicia la aplicación en modo de desarrollo:
 
 bash
 Copiar código:
-ionic serve
+- `ionic serve`
+
+5. Instalar Storage
+
+bash
+Copiar código: 
+- `npm install @ionic/storage`
+
+6. Instalar Storage para Angular
+
+bash
+Copiar código:
+- `npm install @ionic/storage-angular`
+
+7. Instalar Leaflet
+bash
+Copiar código:
+- `npm install leaflet`
+
+8. Instalar los Types para Leaflet
+bash
+Copiar código:
+- `npm install @types/leaflet`
 
 ---
 
