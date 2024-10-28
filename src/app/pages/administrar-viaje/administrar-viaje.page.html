@@ -1,13 +1,70 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>administrar-viaje</ion-title>
+    <ion-title>Administrar Viajes</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">administrar-viaje</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <!-- Formulario para crear o editar un viaje -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Formulario de Viaje</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form (ngSubmit)="createViaje()">
+        <ion-item>
+          <ion-label position="stacked">ID del Viaje</ion-label>
+          <ion-input [(ngModel)]="viajeData.id" name="id" type="number" placeholder="Ingrese un ID único"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Conductor</ion-label>
+          <ion-input [(ngModel)]="viajeData.conductor" name="conductor" type="text" placeholder="Nombre del conductor"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Asientos Disponibles</ion-label>
+          <ion-input [(ngModel)]="viajeData.asientos_disp" name="asientos_disp" type="number" placeholder="Número de asientos disponibles"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Valor del Viaje</ion-label>
+          <ion-input [(ngModel)]="viajeData.valor" name="valor" type="number" placeholder="Costo del viaje"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Destino</ion-label>
+          <ion-input [(ngModel)]="viajeData.nombre_destino" name="nombre_destino" type="text" placeholder="Destino del viaje"></ion-input>
+        </ion-item>
+        
+        <!-- Estado del viaje -->
+        <ion-item>
+          <ion-label position="stacked">Estado del Viaje</ion-label>
+          <ion-select [(ngModel)]="viajeData.estado_viaje" name="estado_viaje" placeholder="Seleccione un estado">
+            <ion-select-option value="pendiente">Pendiente</ion-select-option>
+            <ion-select-option value="en curso">En Curso</ion-select-option>
+            <ion-select-option value="finalizado">Finalizado</ion-select-option>
+          </ion-select>
+        </ion-item>
+        
+        <ion-button expand="block" style="--background: #40E0D0; color: white;" type="submit">Registrar</ion-button>
+        <ion-button expand="block" style="--background: #32CD32; color: white;" (click)="updateViaje()">Modificar</ion-button>
+        <ion-button expand="block" style="--background: #1E90FF; color: white;" (click)="limpiarFormulario()">Limpiar</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Lista de viajes en cuadrícula -->
+  <div class="viajes-grid">
+    <ion-card *ngFor="let viaje of viajes" class="viaje-card">
+      <ion-card-content>
+        <ion-label>
+          <h2>ID Viaje: {{ viaje.id }}</h2>
+          <p><strong>Conductor:</strong> {{ viaje.conductor }}</p>
+          <p><strong>Destino:</strong> {{ viaje.nombre_destino }}</p>
+          <p><strong>Valor:</strong> ${{ viaje.valor }}</p>
+          <p><strong>Asientos Disponibles:</strong> {{ viaje.asientos_disp }}</p>
+          <p><strong>Estado:</strong> {{ viaje.estado_viaje }}</p>
+        </ion-label>
+        <ion-button expand="full" color="warning" (click)="getViaje(viaje.id)">Editar</ion-button>
+        <ion-button expand="full" color="danger" (click)="deleteViaje(viaje.id)">Eliminar</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
