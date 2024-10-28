@@ -71,11 +71,13 @@ Copiar código:
 - `npm install @ionic/storage-angular`
 
 7. Instalar Leaflet
+
 bash
 Copiar código:
 - `npm install leaflet`
 
 8. Instalar los Types para Leaflet
+
 bash
 Copiar código:
 - `npm install @types/leaflet`
