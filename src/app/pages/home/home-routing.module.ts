@@ -23,10 +23,7 @@ const routes: Routes = [
         path: 'listar-viajes',
         loadChildren: () => import('../listar-viajes/listar-viajes.module').then( m => m.ListarViajesPageModule)
       },
-      {
-        path: 'administrar-viaje',
-        loadChildren: () => import('../administrar-viaje/administrar-viaje.module').then( m => m.AdministrarViajePageModule)
-      },
+      
     ]
   }
 ];

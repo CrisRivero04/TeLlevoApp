@@ -1,10 +1,21 @@
-<ion-content>
-  <h1>Historial de Viajes</h1>
-  <ion-card >
-    <ion-card-content>
-      <ion-label>
-        <h2>No hay viajes completados por el momento...</h2>
-      </ion-label>
-    </ion-card-content>
-  </ion-card>
-</ion-content>
+<ion-header [translucent]="true">
+    <ion-toolbar class="header-toolbar">
+      <ion-title class="header-title">Historial de Viajes</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-card *ngFor="let viaje of listaViajes" class="viaje-card">
+      <ion-item lines="none" class="viaje-item">
+        <ion-label class="viaje-label">
+          <h2 class="viaje-destino">{{viaje.nombre_destino}}</h2>
+          <p class="viaje-info">Conductor: {{viaje.conductor}}</p>
+          <p class="viaje-info">Asientos disponibles: {{viaje.asientos_disp}}</p>
+          <p class="viaje-info">Precio: {{viaje.monto | currency}}</p>
+          <p class="viaje-info">Hora de salida: {{viaje.hora_salida}}</p>
+          <p class="viaje-info">Estado: {{viaje.estado}}</p>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+  </ion-content>
+  

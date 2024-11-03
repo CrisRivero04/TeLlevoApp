@@ -1,8 +1,47 @@
-#map_html{
-    height: 50vh;
-    width: 100%;
+.detalle-card {
+  --background: #1F2235;
+  margin: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.leaflet-container {
-    color: #000000;
+ion-card-header {
+  text-align: center;
+}
+
+ion-card-title {
+  font-size: 1.4rem;
+  color: #333;
+  font-weight: 600;
+}
+
+ion-card-subtitle {
+  font-size: 1rem;
+  color: #888;
+}
+
+ion-item {
+  --inner-padding-start: 8px;
+  --inner-padding-end: 8px;
+  padding: 8px 0;
+}
+
+ion-icon {
+  color: #32c8a3;
+}
+
+ion-label {
+  font-weight: 500;
+  color: #1F2235;
+}
+
+ion-note {
+  font-weight: 600;
+  color: #1F2235;
+}
+
+#map_html {
+  height: 70vh; 
+  width: 100%;    
+  color:#000000
 }

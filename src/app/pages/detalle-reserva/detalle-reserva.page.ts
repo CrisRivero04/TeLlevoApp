@@ -1,84 +1,222 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ViajeService } from 'src/app/services/viaje.service';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
+
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
-import { NavController } from '@ionic/angular';
-import * as G from 'leaflet-control-geocoder';
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { ViajeService } from 'src/app/services/viaje.service';
 
 @Component({
   selector: 'app-detalle-reserva',
   templateUrl: './detalle-reserva.page.html',
   styleUrls: ['./detalle-reserva.page.scss'],
 })
-export class DetalleReservaPage implements OnInit {
 
-  usuario: any;
-  private map: L.Map | undefined;
-  private geocoder: G.Geocoder | undefined;
-  latitud: number = 0;
-  longitud: number = 0;
-  direccion: string = "";
-  distancia_metros: number = 0;
-  tiempo_segundos: number = 0;
-  id: string = "";
+export class DetalleReservaPage implements OnInit, AfterViewInit {
+  id: number = 0;
   viaje: any = {};
+  usuario: any;
+  puedeTomarViaje: boolean = false;
+  esConductor: boolean = false;
+  viajeTerminado: boolean = false; 
+  private map: L.Map | undefined;
 
   constructor(
-    private activatedRoute: ActivatedRoute, 
-    private viajeService: ViajeService, 
-    private navController: NavController
-  ) { }
+    private activatedRouted: ActivatedRoute,
+    private crudViajes: ViajeService,
+    private crudUsuarios: UsuarioService,
+    private router: Router,
+    private alertController: AlertController
+  ) {}
 
   async ngOnInit() {
-    this.id = this.activatedRoute.snapshot.paramMap.get("id") || "";
-    this.viaje = await this.viajeService.getViaje(this.id);
+    this.id = +this.activatedRouted.snapshot.paramMap.get("id")!;
+    this.usuario = JSON.parse(localStorage.getItem("usuario") || '{}');
+    this.esConductor = this.usuario.tiene_vehiculo == 'si';
+
+    await this.obtenerViaje();
   }
 
-  ionViewDidEnter() {
-    // Llama a initMap cuando la vista haya cargado completamente
-    this.initMap();
-  }
-
-  initMap() {
+  async obtenerViaje() {
+    this.viaje = await this.crudViajes.getViaje(this.id);
+  
+    if (!this.viaje) {
+      console.error('Viaje no encontrado');
+      return;
+    }
+  
+    this.viaje.usuariosNombres = this.viaje.usuariosNombres || [];
+    console.log('Usuarios:', this.viaje.usuariosNombres);
+    
+    this.puedeTomarViaje = !this.esConductor && this.viaje.asientos_disp > 0 && !this.viaje.pasajeros.includes(this.usuario.rut);
+    
     if (this.map) {
-      this.map.off();
       this.map.remove();
     }
 
-    this.map = L.map("map_html").setView([-33.59837122676798, -70.57877634597855], 16);
-
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(this.map);
-
-    // Define los puntos de ruta con origen y destino
-    L.Routing.control({
-      waypoints: [
-        L.latLng(-33.608552227594245, -70.58039819211703), // Coordenadas de inicio
-        L.latLng(this.viaje.latitud, this.viaje.longitud) // Coordenadas de destino
-      ],
-      fitSelectedRoutes: true,
-      show: false,
-    }).addTo(this.map);
+    this.initMap();
   }
 
-  async tomar_viaje() {
-    var usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-    console.log("Usuario en localStorage:", usuario);
+  async tomarViaje() {
+    const alertConfirm = await this.alertController.create({
+      header: '¿Quieres tomar este viaje?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Acción cancelada');
+          },
+        },
+        {
+          text: 'Sí',
+          handler: async () => {
+            const exito = await this.crudViajes.tomarViaje(this.id, this.usuario.rut);
+            if (exito) {
+              const alertSuccess = await this.alertController.create({
+                header: 'Viaje tomado con éxito',
+                buttons: [
+                  {
+                    text: 'Aceptar',
+                    handler: async () => {
+                      await this.router.navigate([`/detalle-reserva/${this.id}`]);
+                      window.location.reload(); // Refresca la pantalla de detalle-reserva
+                    },
+                  },
+                ],
+              });
+              await alertSuccess.present();
+            }
+          },
+        },
+      ],
+    });
+    await alertConfirm.present();
+  }
   
-    var pasajero = {
-      "rut": usuario.rut,
-      "nombre": usuario.nombre,
-      "correo": usuario.correo
-    };
+
+  async salirDelViaje() {
+    const alertConfirm = await this.alertController.create({
+      header: '¿Quieres salir del viaje?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Acción cancelada');
+          },
+        },
+        {
+          text: 'Sí',
+          handler: async () => {
+            const exito = await this.crudViajes.salirViaje(this.id, this.usuario.rut);
+            if (exito) {
+              const alertSuccess = await this.alertController.create({
+                header: 'Has salido del viaje con éxito',
+                buttons: [
+                  {
+                    text: 'Aceptar',
+                    handler: async () => {
+                      await this.router.navigate([`/detalle-reserva/${this.id}`]);
+                      window.location.reload(); // Forzar recarga de la página
+                    },
+                  },
+                ],
+              });
+              await alertSuccess.present();
+            }
+          },
+        },
+      ],
+    });
+    await alertConfirm.present();
+  }
   
-    if(await this.viajeService.updateViaje(this.id, pasajero)){
-      alert("Viaje tomado con éxito!");
-      this.navController.navigateRoot("/home");
-    }else{
-      alert("ERROR! ya eres pasajero!");
+
+  async cambiarEstado() {
+    if (this.esConductor) {
+      const exito = await this.crudViajes.cambiarEstadoViaje(this.id);
+      if (exito) {
+        this.viaje.estado = this.viaje.estado === 'Pendiente' ? 'En camino' : 'Terminado';
+        this.viajeTerminado = this.viaje.estado === 'Terminado';
+      }
     }
   }
+
+  ngAfterViewInit() {
+    if (this.map) {
+      this.map.invalidateSize();
+    }
+  }
+
+  initMap() {
+    if (!this.map && this.viaje && this.viaje.latitud && this.viaje.longitud) {
+      setTimeout(() => {
+        this.map = L.map('map_html').setView([+this.viaje.latitud, +this.viaje.longitud], 13);
+  
+        // Tile layer para modo día (claro)
+        const dayLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; OpenStreetMap contributors'
+        });
+  
+        // Tile layer para modo noche (oscuro)
+        const nightLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; CartoDB'
+        });
+  
+        // Agrega el modo día por defecto
+        dayLayer.addTo(this.map);
+  
+        // Configura el punto de origen y destino de la ruta
+        const puntoOrigen = L.latLng(-33.59844040672239, -70.57881148451541);
+        const puntoDestino = L.latLng(+this.viaje.latitud, +this.viaje.longitud);
+  
+        // Agrega el control de rutas con puntos dinámicos y personaliza el color de la línea
+        L.Routing.control({
+          waypoints: [puntoOrigen, puntoDestino],
+          routeWhileDragging: false,
+          fitSelectedRoutes: true,
+          lineOptions: {
+            styles: [{ color: '#800080', opacity: 0.8, weight: 6 }], // Color morado
+            extendToWaypoints: true,
+            missingRouteTolerance: 1
+          }
+        }).addTo(this.map);
+
+        // Crear un control personalizado para el botón de minimización
+      const ToggleButtonControl = L.Control.extend({
+        options: { position: 'topright' },
+        onAdd: () => {
+          const button = L.DomUtil.create('button', 'toggle-button');
+          button.innerHTML = 'Minimizar';
+          button.onclick = () => {
+            const container = document.querySelector('.leaflet-routing-container') as HTMLElement;
+            if (container) {
+              container.style.display = container.style.display === 'none' ? 'block' : 'none';
+              button.innerHTML = container.style.display === 'none' ? 'Mostrar' : 'Minimizar';
+            }
+          };
+          return button;
+        }
+      });
+
+      // Agregar el botón al mapa
+      this.map.addControl(new ToggleButtonControl());
+
+        // Alternador de modo día/noche
+        const baseMaps = {
+          "Día": dayLayer,
+          "Noche": nightLayer
+        };
+  
+        // Control de capas para cambiar entre modos
+        L.control.layers(baseMaps, undefined, { position: 'topleft' }).addTo(this.map);
+      }, 0);
+    }
+  }
+  
+  
 }

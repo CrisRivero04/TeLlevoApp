@@ -1,0 +1,45 @@
+// Fondo general de la página
+ion-content {
+    --background: #1F2235;
+  }
+  
+  // Encabezado
+  .header-toolbar {
+    --background: #1F2235;
+  }
+  
+  .header-title {
+    color: #32c8a3; // Verde turquesa
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+  }
+  
+  
+  
+  // Etiquetas y campos de entrada del formulario
+  ion-item {
+    margin: 10px 0;
+  }
+  
+  ion-label {
+    color: #333333;
+    font-weight: 600;
+  }
+  
+  ion-input {
+    color: #555555;
+  }
+  
+  ion-datetime {
+    color: #555555;
+  }
+  
+  // Botón de registro
+  .register-button {
+    margin: 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    --background: #32c8a3; // Verde turquesa
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  

@@ -1,9 +1,50 @@
-#map_html{
-    height: 100vh;
-    width: 100%;
-    //margin: 10% 10% 10% 10%;
-}
+// Fondo general de la página
+ion-content {
+    --background: #f2f2f2;
+  }
+  
+  // Encabezado
+  .header-toolbar {
+    --background: #32c857;
+  }
+  
+  .header-title {
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+  }
+  
+  // Estilo de la tarjeta de viaje
+  .viaje-card {
+    border-radius: 15px;
+    margin: 15px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+  }
+  
+  .viaje-item {
+    border-radius: 15px;
+  }
+  
+  .viaje-label {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .viaje-destino {
+    color: #333333;
+    font-size: 1.2em;
+    font-weight: 600;
+  }
+  
+  .viaje-info {
+    color: #555555;
+    margin: 5px 0;
+  }
+  
+  // Botón de detalle
+  .detalle-button {
+    font-weight: bold;
+    color: #32c8a3;
+  }
 
-.leaflet-container {
-    color: #000000;
-}
+  

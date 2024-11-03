@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-//lo primero es agregar un import:
-import * as L from 'leaflet';
-import * as G from 'leaflet-control-geocoder';
-import 'leaflet-routing-machine';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ViajeService } from 'src/app/services/viaje.service';
 
 @Component({
@@ -14,144 +10,35 @@ import { ViajeService } from 'src/app/services/viaje.service';
 })
 export class ViajesPage implements OnInit {
 
-  //variables del grupo:
+  usuario: any;
+  
   viaje = new FormGroup({
-    id: new FormControl('',[]),
-    conductor: new FormControl('',[Validators.required]),
-    asientos_disp: new FormControl('',[Validators.required]),
-    valor: new FormControl('',[Validators.required]),
-    nombre_destino: new FormControl('',[Validators.required]),
-    latitud: new FormControl('',[Validators.required]),
-    longitud: new FormControl('',[Validators.required]),
-    distancia_metros: new FormControl('',[Validators.required]),
-    tiempo_minutos: new FormControl(0,[Validators.required]),
-    estado_viaje: new FormControl('pendiente'),
-    pasajeros: new FormControl([])
+    conductor: new FormControl(),
+    asientos_disp: new FormControl(),
+    nombre_destino: new FormControl(),
+    latitud: new FormControl(),
+    longitud: new FormControl(),
+    metros: new FormControl(),
+    tiempo_min: new FormControl(),
+    estado: new FormControl('pendiente'),
+    monto: new FormControl(),
+    hora_salida: new FormControl(),
+    pasajeros: new FormControl([]),
   });
 
-  //vamos a crear variable(s) para controlar el mapa:
-  usuario: any;
-  private map: L.Map | undefined;
-  private geocoder: G.Geocoder | undefined;
-  latitud: number = 0;
-  longitud: number = 0;
-  direccion: string = "";
-  distancia_metros: number = 0;
-  tiempo_segundos: number = 0;
+  viajes: any[] = [];
+  
+  constructor(private crudViajes: ViajeService , private router: Router) { }
 
-  //Simulacion de una lista de viajes ya creados: Eventualmente le Cargan datos a la lista
-  viajes: any[] = [{
-    "id": 1,
-    "conductor": "Lalo Cura",
-    "asientos_disponibles": 4,
-    "nombre_destino": "Santa Isabel Sur",
-    "latitud": -33.59,
-    "longitud": -70.53,
-    "distancia_metros": 5000,
-    "tiempo_segundos": 900,
-    "estado_viaje": "pendiente",
-    "pasajeros": []
-    },{
-      "id": 2,
-      "conductor": "Elba Lazo",
-      "asientos_disponibles": 1,
-      "nombre_destino": "Santa Isabel Sur",
-      "latitud": -33.59,
-      "longitud": -70.53,
-      "distancia_metros": 5000,
-      "tiempo_segundos": 900,
-      "estado_viaje": "pendiente",
-      "pasajeros": [17888444, 15999555]
-    },{
-      "id": 3,
-      "conductor": "Elvis Teck",
-      "asientos_disponibles": 0,
-      "nombre_destino": "Santa Isabel Sur",
-      "latitud": -33.59,
-      "longitud": -70.53,
-      "distancia_metros": 5000,
-      "tiempo_segundos": 900,
-      "estado_viaje": "termindo",
-      "pasajeros": [14888555]
-    },{
-      "id": 4,
-      "conductor": "Armando Casas",
-      "asientos_disponibles": 0,
-      "nombre_destino": "Santa Isabel Sur",
-      "latitud": -33.59,
-      "longitud": -70.53,
-      "distancia_metros": 5000,
-      "tiempo_segundos": 900,
-      "estado_viaje": "pendiente",
-      "pasajeros": [17888999,15444888,16555444,15888888]
-    }
-  ];
-
-  constructor(private viajeService: ViajeService) { }
-
-  async ngOnInit() {
-    this.initMap();
+  ngOnInit() {
+    this.obtenerViajes();
     this.usuario = JSON.parse(localStorage.getItem("usuario") || '');
-    this.viaje.controls.conductor.setValue(this.usuario.nombre);
-    await this.rescatarViajes();
   }
 
-  async crearViaje(){
-    if(await this.viajeService.createViaje(this.viaje.value)){
-      alert("VIAJE CREADO!");
-      this.viaje.reset();
-      await this.rescatarViajes();
-    }
-  }
-
-
-  //aqui rescatamos el viaje:
-  async rescatarViajes(){
-    this.viajes = await this.viajeService.getViajes();
-  }
-
-  initMap(){
-    try {
-      //ACA CARGAMOS E INICIALIZAMOS EL MAPA:
-      this.map = L.map("map_html").locate({setView:true, maxZoom:16});
-      //this.map = L.map("map_html").setView([-33.608552227594245, -70.58039819211703],16);
-      
-      //ES LA PLANTILLA PARA QUE SEA VEA EL MAPA:
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      }).addTo(this.map);
-  
-      //VAMOS A AGREGAR UN BUSCADOR DE DIRECCIONES EN EL MAPA:
-      this.geocoder = G.geocoder({
-        placeholder: "Ingrese dirección a buscar",
-        errorMessage: "Dirección no encontrada"
-      }).addTo(this.map);
-  
-      //VAMOS A REALIZAR UNA ACCIÓN CON EL BUSCADOR, CUANDO OCURRA ALGO CON EL BUSCADOR:
-      this.geocoder.on('markgeocode', (e)=>{
-        //cargo el formulario:
-        let lat = e.geocode.properties['lat'];
-        let lon = e.geocode.properties['lon'];
-        this.viaje.controls.nombre_destino.setValue(e.geocode.properties['display_name']);
-        
-        this.viaje.controls.latitud.setValue(lat);
-        this.viaje.controls.longitud.setValue(lon);
-        
-        if(this.map){
-          L.Routing.control({
-            waypoints: [L.latLng(-33.608552227594245, -70.58039819211703),
-              L.latLng(lat,lon)],
-              fitSelectedRoutes: true,
-            }).on('routesfound', (e)=>{
-              this.viaje.controls.distancia_metros.setValue(e.routes[0].summary.totalDistance);
-              this.viaje.controls.tiempo_minutos.setValue(Math.round(e.routes[0].summary.totalTime/60));
-          }).addTo(this.map);
-        }
-      });
-    } catch (error) {
-    }
+  async obtenerViajes() {
+    const allViajes = await this.crudViajes.getViajes();
+    this.viajes = allViajes
+      .filter(viaje => viaje.asientos_disp > 0 && viaje.estado !== "Finalizado"); 
   }
   
-
 }

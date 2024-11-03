@@ -13,7 +13,7 @@ import { Storage } from '@ionic/storage-angular';  // Importar Storage
 })
 export class RegistroPage implements OnInit{
 
-  persona: FormGroup;
+  usuario: FormGroup;
   bienvenida: string = 'Bienvenido, por favor complete el formulario.';
   titulo: string = 'Registro de Usuario'; 
 
@@ -30,7 +30,7 @@ export class RegistroPage implements OnInit{
   ) {
     this.initStorage();  // Inicializar el storage
 
-    this.persona = this.formBuilder.group({
+    this.usuario = this.formBuilder.group({
       correo: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@duocuc\\.cl$')]],  
       numero_celular: ['', [Validators.required, Validators.pattern('^\\+569[0-9]{8}$')]], 
       rut: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(10), this.validarRut.bind(this)]],  
@@ -47,25 +47,25 @@ export class RegistroPage implements OnInit{
       anio_inscripcion: ['']
     }, { validators: this.passwordsCoinciden });
 
-    this.persona.get('tiene_vehiculo')?.valueChanges.subscribe(value => {
+    this.usuario.get('tiene_vehiculo')?.valueChanges.subscribe(value => {
       if (value === 'si') {
-        this.persona.get('marca_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
-        this.persona.get('modelo_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
-        this.persona.get('cant_asientos')?.setValidators([Validators.required, Validators.min(4), Validators.max(32),Validators.pattern('^[0-9]+$')]);
-        this.persona.get('patente')?.setValidators([Validators.required, Validators.pattern('^[A-Za-z]{2}[A-Za-z]{2}[0-9]{2}$')]); // Patente formato chileno
-        this.persona.get('anio_inscripcion')?.setValidators([Validators.required, Validators.min(2012), Validators.max(2024)]); // Año de inscripción entre 2012 y 2024
+        this.usuario.get('marca_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
+        this.usuario.get('modelo_vehiculo')?.setValidators([Validators.required, Validators.pattern('^[a-zA-Z]+$')]);
+        this.usuario.get('cant_asientos')?.setValidators([Validators.required, Validators.min(4), Validators.max(32),Validators.pattern('^[0-9]+$')]);
+        this.usuario.get('patente')?.setValidators([Validators.required, Validators.pattern('^[A-Za-z]{2}[A-Za-z]{2}[0-9]{2}$')]); // Patente formato chileno
+        this.usuario.get('anio_inscripcion')?.setValidators([Validators.required, Validators.min(2012), Validators.max(2024)]); // Año de inscripción entre 2012 y 2024
       } else { 
-        this.persona.get('marca_vehiculo')?.clearValidators();
-        this.persona.get('modelo_vehiculo')?.clearValidators();
-        this.persona.get('cant_asientos')?.clearValidators();
-        this.persona.get('patente')?.clearValidators();
-        this.persona.get('anio_inscripcion')?.clearValidators();
+        this.usuario.get('marca_vehiculo')?.clearValidators();
+        this.usuario.get('modelo_vehiculo')?.clearValidators();
+        this.usuario.get('cant_asientos')?.clearValidators();
+        this.usuario.get('patente')?.clearValidators();
+        this.usuario.get('anio_inscripcion')?.clearValidators();
       }
-      this.persona.get('marca_vehiculo')?.updateValueAndValidity();
-      this.persona.get('modelo_vehiculo')?.updateValueAndValidity();
-      this.persona.get('cant_asientos')?.updateValueAndValidity();
-      this.persona.get('patente')?.updateValueAndValidity();
-      this.persona.get('anio_inscripcion')?.updateValueAndValidity();
+      this.usuario.get('marca_vehiculo')?.updateValueAndValidity();
+      this.usuario.get('modelo_vehiculo')?.updateValueAndValidity();
+      this.usuario.get('cant_asientos')?.updateValueAndValidity();
+      this.usuario.get('patente')?.updateValueAndValidity();
+      this.usuario.get('anio_inscripcion')?.updateValueAndValidity();
     });
   }
 
@@ -105,7 +105,7 @@ export class RegistroPage implements OnInit{
 
   public async registroUsuario(): Promise<void> {
     try {
-      const usuarioData = { ...this.persona.value };
+      const usuarioData = { ...this.usuario.value };
 
       usuarioData.fecha_nacimiento = moment(usuarioData.fecha_nacimiento).format('YYYY-MM-DD');
       

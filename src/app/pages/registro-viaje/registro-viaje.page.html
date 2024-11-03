@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar style="--background: #1F2235;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <ion-title style="color: #32c8a3; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600;">
+        Regsitrar viaje
+      </ion-title>
+      <ion-button fill="clear" size="large" routerLink="/home/viajes">
+        <ion-icon style="color: #32c8a3;" name="arrow-back-circle-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="map_html" style="height: 400px;"></div>
+
+  <ion-card class="form-card">
+    <form [formGroup]="viaje">
+      <ion-list>
+        <ion-item>
+          <ion-input type="number" label="Asientos disponibles" labelPlacement="floating" placeholder="Ej: 1,2,3..." formControlName="asientos_disp"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input type="number" label="Monto" labelPlacement="floating" placeholder="Ej: 3000" formControlName="monto"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Hora de salida" labelPlacement="floating" placeholder="Ej 20:00" formControlName="hora_salida"></ion-input>
+        </ion-item>
+      </ion-list>
+    </form>
+  </ion-card>
+
+  <ion-button expand="block" color="success" (click)="registrar()" class="register-button">
+    Registrar Viaje
+  </ion-button>
+</ion-content>

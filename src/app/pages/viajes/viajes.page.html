@@ -1,53 +1,29 @@
-<ion-content>
+<ion-header [translucent]="true">
+    <ion-toolbar class="header-toolbar">
+      <ion-title class="header-title">Viajes Disponibles</ion-title>
+    </ion-toolbar>
+  </ion-header>
   
-  <ion-accordion-group>
-      <ion-accordion value="Viajes">
-        <ion-item slot="header" color="light">
-          <ion-label>Viajes</ion-label>
-        </ion-item>
-        <div class="ion-padding" slot="content" *ngFor="let v of viajes">
-          <ion-card *ngIf="v.estado_viaje=='pendiente'">
-              <ion-card-header>
-                  <ion-card-title>{{v.nombre_destino}}</ion-card-title>
-                  <ion-card-subtitle>{{v.estado_viaje}}</ion-card-subtitle>
-              </ion-card-header>
-              <ion-card-content>
-                  <p>Asientos disponibles: {{v.asientos_disp}}</p>
-                  <p>Precio: {{v.valor/200 * 100 | currency:'CLP'}}</p>
-              </ion-card-content>
-              <ion-button routerLink="/home/viajes/detalle-reserva/{{v.id}}" size="block" [disabled]="v.asientos_disponibles == 0">Ver detalle</ion-button>
-          </ion-card>
-        </div>
-      </ion-accordion>
-
-      <ion-accordion value="crear_viaje" *ngIf="usuario.tiene_vehiculo=='si'">
-        <ion-item slot="header" color="light">
-          <ion-label>Crear viaje</ion-label>
-        </ion-item>
-        <div class="ion-padding" slot="content">
-          <!--ponemos el mapa-->
-          
-
-          <!--ponemos del formulario para crear el viaje-->
-          <form [formGroup]="viaje" (ngSubmit)="crearViaje()">
-            <ion-input type="number" labelPlacement="stacked" label="id" formControlName="id"></ion-input>
-            <ion-input type="number" labelPlacement="stacked" label="Asientos disp." formControlName="asientos_disp"></ion-input>
-            <ion-input type="number" labelPlacement="stacked" label="Valor" formControlName="valor"></ion-input>
-            <ion-input labelPlacement="stacked" label="Destino" formControlName="nombre_destino"></ion-input>
-            <ion-input labelPlacement="stacked" label="Distancia (metros)" formControlName="distancia_metros"></ion-input>
-            <ion-input type="number" labelPlacement="stacked" label="Minutos" formControlName="tiempo_minutos"></ion-input>
-            <ion-button type="submit" size="block">Crear viaje</ion-button>
-          </form>
-        </div>
-      </ion-accordion>
-    </ion-accordion-group>
-
-  <ion-input label="Latitud" [(ngModel)]="latitud"></ion-input>
-  <ion-input label="Longitud" [(ngModel)]="longitud"></ion-input>
-  <ion-input label="Dirección" [(ngModel)]="direccion"></ion-input>
-  <ion-input label="Distancia metros" [(ngModel)]="distancia_metros"></ion-input>
-  <ion-input label="Tiempo segundos" [(ngModel)]="tiempo_segundos"></ion-input>
+  <ion-content>
+    <ion-card *ngFor="let v of viajes" class="viaje-card">
+      <ion-item lines="none" class="viaje-item">
+        <ion-label class="viaje-label">
+          <h2 class="viaje-destino">{{v.nombre_destino}}</h2>
+          <p class="viaje-info">Conductor: {{v.conductor}}</p>
+          <p class="viaje-info">Asientos disponibles: {{v.asientos_disp}}</p>
+          <p class="viaje-info">Precio: {{v.monto | currency}}</p>
+          <p class="viaje-info">Hora de salida: {{v.hora_salida}}</p>
+          <ion-button [routerLink]="['/detalle-reserva', v.id]" expand="block" color="success" class="detalle-button">
+            Ver Detalle
+          </ion-button>
+        </ion-label>
+      </ion-item>
+    </ion-card>
   
-  <div id="map_html"></div>
-
-</ion-content>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-button *ngIf="usuario?.tiene_vehiculo == 'si'" expand="block" color="success" routerLink="/registro-viaje" class="add-button">
+        Agregar viaje
+      </ion-button>
+    </ion-fab>
+  </ion-content>
+  
