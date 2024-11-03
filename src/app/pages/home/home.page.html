@@ -12,6 +12,11 @@
 </ion-header>
 
 <ion-content style="--background: #F5F5FA;">
+
+  <ion-card>
+    
+  </ion-card>
+
   <ion-tabs>
     <ion-tab-bar slot="bottom" style="--background: #1F2235;">
       <ion-tab-button tab="listar-viajes">
@@ -19,6 +24,9 @@
       </ion-tab-button>
       <ion-tab-button tab="viajes">
         <ion-icon name="car-sport-outline" style="color: #FFFFFF;"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button tab="administrador-viajes"  *ngIf="usuario.tipo=='Administrador' && 'Conductor'">
+        <ion-icon name="albums-outline"  style="color: #FFFFFF;"></ion-icon>
       </ion-tab-button>
       <ion-tab-button tab="administrador" *ngIf="usuario.tipo=='Administrador'">
         <ion-icon name="business-outline" style="color: #FFFFFF;"></ion-icon>

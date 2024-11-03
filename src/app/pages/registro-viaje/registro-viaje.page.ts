@@ -28,7 +28,7 @@ export class RegistroViajePage implements OnInit, AfterViewInit {
     longitud: new FormControl('',Validators.required),
     metros: new FormControl('',Validators.required),
     tiempo_min: new FormControl(),
-    estado: new FormControl('pendiente'),
+    estado: new FormControl('Pendiente'),
     monto: new FormControl('',Validators.required),
     hora_salida: new FormControl('',Validators.required),
     pasajeros: new FormControl([]),

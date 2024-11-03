@@ -22,13 +22,13 @@ export class ViajeService {
 
       let viaje = {
         asientos_disp: "4",
-        nombre_destino: "Montenegro 1665, Puente Alto, Región Metropolitana",
-        latitud: "-33.611452601490996",
-        longitud: "-70.55638403175385",
+        nombre_destino: "Apostol Matias 2853, Puente Alto, Región Metropolitana",
+        latitud: "-33.5843704050226",
+        longitud: "-70.5699218595535",
         metros: "3600",
         tiempo_min: "9",
         estado: "Pendiente",
-        monto: "3000",
+        monto: "2000",
         hora_salida:"20:00",
         pasajeros: []
       };

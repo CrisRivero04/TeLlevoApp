@@ -119,7 +119,7 @@ export class DetalleReservaPage implements OnInit, AfterViewInit {
                     text: 'Aceptar',
                     handler: async () => {
                       await this.router.navigate([`/detalle-reserva/${this.id}`]);
-                      window.location.reload(); // Forzar recarga de la página
+                      window.location.reload();
                     },
                   },
                 ],
@@ -134,7 +134,7 @@ export class DetalleReservaPage implements OnInit, AfterViewInit {
   }
   
 
-  async cambiarEstado() {
+  async actualizarEstado() {
     if (this.esConductor) {
       const exito = await this.crudViajes.cambiarEstadoViaje(this.id);
       if (exito) {

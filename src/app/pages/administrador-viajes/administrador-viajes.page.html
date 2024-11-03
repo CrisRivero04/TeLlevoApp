@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Administrador de Viajes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Barra de búsqueda -->
+  <ion-searchbar placeholder="Buscar viaje" [(ngModel)]="searchQuery" (ionInput)="buscarViaje()"></ion-searchbar>
+
+  <!-- Lista de viajes -->
+  <ion-list>
+    <ion-item *ngFor="let viaje of viajes" (click)="selectViaje(viaje)">
+      <ion-label>
+        <h2>{{ viaje.nombre_destino }}</h2>
+        <p>Estado: {{ viaje.estado }} | Asientos: {{ viaje.asientos_disp }}</p>
+      </ion-label>
+      <ion-button color="danger" slot="end" (click)="deleteViaje(viaje.id)">Eliminar</ion-button>
+      <ion-button color="tertiary" slot="end" (click)="selectViaje(viaje)">Modificar</ion-button>
+    </ion-item>
+  </ion-list>
+
+  <!-- Formulario de edición de viaje -->
+  <div *ngIf="selectedViaje">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Editar Viaje</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label>Destino: </ion-label>
+          <ion-input [(ngModel)]="selectedViaje.nombre_destino"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Estado: </ion-label>
+          <ion-select [(ngModel)]="selectedViaje.estado">
+            <ion-select-option value="Pendiente">Pendiente</ion-select-option>
+            <ion-select-option value="En Curso">En Curso</ion-select-option>
+            <ion-select-option value="Finalizado">Finalizado</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Asientos Disponibles: </ion-label>
+          <ion-input type="number" [(ngModel)]="selectedViaje.asientos_disp"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Monto : </ion-label>
+          <ion-input type="number" [(ngModel)]="selectedViaje.monto"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Hora de Salida:</ion-label>
+          <ion-input [(ngModel)]="selectedViaje.hora_salida"></ion-input>
+        </ion-item>
+        
+        <!-- Botones de guardar y cancelar -->
+        <ion-button expand="full" color="success" (click)="updateViaje()">Guardar Cambios</ion-button>
+        <ion-button expand="full" color="medium" (click)="clearSelection()">Cancelar</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
