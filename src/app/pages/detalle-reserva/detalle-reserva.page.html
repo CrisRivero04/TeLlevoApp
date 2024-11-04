@@ -1,11 +1,11 @@
 <ion-header>
-  <ion-toolbar style="--background: #1F2235;">
+  <ion-toolbar style="--background: #32c857;">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-      <ion-title style="color: #32c8a3; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600;">
+      <ion-title style="color: #ffffff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 600;">
         Detalle del Viaje
       </ion-title>
       <ion-button fill="clear" size="large" (click)="reloadAndGoBack()">
-        <ion-icon style="color: #32c8a3;" name="arrow-back-circle-outline"></ion-icon>
+        <ion-icon style="color: #ffffff;" name="arrow-back-circle-outline"></ion-icon>
       </ion-button>
     </div>
   </ion-toolbar>
@@ -16,8 +16,7 @@
     <div id="map_html" style="height: 400px;"></div>
 
     <ion-card-header>
-      
-      <ion-card-title style="color: #32c8a3;" >Destino: {{viaje.nombre_destino}}</ion-card-title>
+      <ion-card-title style="color: #ffffff;">Destino: {{viaje.nombre_destino}}</ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
@@ -64,7 +63,7 @@
     Salir de viaje
   </ion-button>
 
-  <ion-button expand="full" shape="round" style="color: #000000;" (click)="actualizarEstado()" [disabled]="viajeTerminado"  *ngIf="esConductor">
+  <ion-button expand="full" shape="round" style="--background: #32c857; --color: #000000;" (click)="actualizarEstado()" [disabled]="viajeTerminado" *ngIf="esConductor">
     Actualizar estado del viaje
   </ion-button>
 </ion-content>
