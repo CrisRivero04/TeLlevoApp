@@ -25,7 +25,7 @@
       <ion-tab-button tab="viajes">
         <ion-icon name="car-sport-outline" style="color: #FFFFFF;"></ion-icon>
       </ion-tab-button>
-      <ion-tab-button tab="administrador-viajes"  *ngIf="usuario.tipo=='Administrador' || 'Conductor'">
+      <ion-tab-button tab="administrador-viajes"  *ngIf="usuario.tipo =='Administrador' || usuario.tipo == 'Conductor'">
         <ion-icon name="albums-outline"  style="color: #FFFFFF;"></ion-icon>
       </ion-tab-button>
       <ion-tab-button tab="administrador" *ngIf="usuario.tipo=='Administrador'">
