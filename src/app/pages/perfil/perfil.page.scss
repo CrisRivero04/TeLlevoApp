@@ -1,15 +1,59 @@
+// Fondo general de la página
+ion-content {
+  --background: #f2f2f2;
+}
+
+// Encabezado
+.header-toolbar {
+  --background: #32c857;
+}
+
+.header-title {
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 600;
+}
+
+// Estilo del contenedor del perfil
 .perfil-container {
-    text-align: center;
-    margin-top: 20px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+// Estilo del avatar
+.avatar-usuario {
+  display: inline-block;
+  margin-bottom: 20px;
+  ion-icon {
+    width: 120px;
+    height: 120px;
+    color: #3880ff; // Color azul por defecto de Ionic
   }
-  
-  .avatar-usuario {
-    display: inline-block;
-    margin-bottom: 20px;
-    ion-icon {
-      width: 120px;
-      height: 120px;
-      color: #3880ff; /* Color azul por defecto de Ionic */
-    }
-  }
-  
+}
+
+// Estilo de la tarjeta del perfil
+.perfil-card {
+  border-radius: 15px;
+  margin: 15px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+// Título del perfil
+.perfil-titulo {
+  color: #333333;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+// Estilo del botón "Guardar Cambios"
+.guardar-button {
+  font-weight: bold;
+  color: #32c8a3; // Color del botón "Ver Detalle"
+}
+
+// Estilo del botón "Editar Perfil"
+.editar-button {
+  font-weight: bold;
+  color: #32c8a3; // Color del botón "Ver Detalle"
+}
