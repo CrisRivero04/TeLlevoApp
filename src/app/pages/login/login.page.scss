@@ -4,14 +4,12 @@
   align-items: center;     /* Centra verticalmente */
   height: 100vh;           /* Ocupa toda la altura de la pantalla */
   width: 100vw;            /* Ocupa todo el ancho de la pantalla */
-  background-color: #1F2235; /* Fondo gris claro */
+  background-color: #f2f2f2; /* Fondo blanco */
   padding: 20px;           /* Un poco de espacio interno */
 }
 
-.form-container {
-  width: 100%;
-  max-width: 500px;        /* Ajuste para pantallas más anchas */
-  background: #1F2235;     /* Fondo blanco para el formulario */
+.login-card {
+  background-color: #333333; /* Fondo gris oscuro para la tarjeta */
   border-radius: 10px;
   padding: 40px;           /* Espacio interno del formulario */
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
@@ -38,16 +36,22 @@ ion-input {
   --border-radius: 8px;
   font-size: 18px;
   font-weight: bold;
-  box-shadow: 0px 4px 6px rgba(50, 200, 87, 0.4); /* Sombra más clara */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra más clara */
   color: #ffffff;           /* Color de texto blanco */
 }
 
 .toolbar-naranja {
-  --background: #32c857; /* Color naranja */
+  --background: #32c857; /* Color verde */
   --color: #000000; /* Cambia el color del texto si es necesario */
 }
 
 .toolbar-turquesa {
   --background: #1F2235; /* Color turquesa */
   --color: #32c857;      /* Letra en color negro */
+}
+
+/* Color de texto para los enlaces */
+.login-text {
+  color: #dddddd; /* Color gris claro para el texto */
+  font-size: 0.9em; /* Tamaño de fuente más pequeño */
 }
