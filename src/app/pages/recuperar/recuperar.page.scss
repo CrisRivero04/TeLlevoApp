@@ -1,9 +1,59 @@
-.toolbar-naranja {
-    --background: #FFA500; /* Color naranja */
-    --color: #000000; /* Cambia el color del texto si es necesario */
+// Fondo general de la página
+ion-content {
+  --background: #f2f2f2;
+}
+
+// Encabezado
+.header-toolbar {
+  --background: #32c857; // Color verde similar al encabezado de la página Viajes
+}
+
+.header-title {
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 600;
+}
+
+// Estilo del contenedor de recuperación
+.recuperar-container {
+  text-align: center;
+  padding: 20px;
+}
+
+// Estilo de la tarjeta de recuperación
+.recuperar-card {
+  border-radius: 15px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  background-color: #333333; // Fondo gris oscuro para la tarjeta de recuperación
+}
+
+// Estilo del campo de entrada de correo
+.input-correo {
+  background-color: #333333; // Fondo gris oscuro similar a las tarjetas de "Viajes"
+  --placeholder-color: #bbbbbb; // Color gris claro para el texto de marcador de posición
+  color: #dddddd; // Color de texto gris claro
+  border-radius: 8px;
+  ion-label {
+    color: #bbbbbb; // Color gris claro para las etiquetas
   }
-  
-  .toolbar-turquesa {
-    --background: #40E0D0; /* Color turquesa */
-    --color: #000000;      /* Letra en color negro */
+  ion-input {
+    color: #dddddd; // Color gris claro para el texto de entrada
   }
+}
+
+// Mensaje de error
+.error-message {
+  color: #ff4d4d; // Rojo para indicar error
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+// Estilo del botón "Restablecer"
+.boton-restablecer {
+  margin-top: 20px;
+  --background: #32c857; // Verde para el botón, igual que el botón "Agregar viaje"
+  --color: #ffffff; // Texto blanco en el botón
+  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}

@@ -27,7 +27,7 @@ ion-content {
   ion-icon {
     width: 120px;
     height: 120px;
-    color: #3880ff; // Color azul por defecto de Ionic
+    color: #32c8a3; // Azul personalizado
   }
 }
 
@@ -49,11 +49,17 @@ ion-content {
 // Estilo del botón "Guardar Cambios"
 .guardar-button {
   font-weight: bold;
-  color: #32c8a3; // Color del botón "Ver Detalle"
+  color: #32c8a3;
 }
 
 // Estilo del botón "Editar Perfil"
 .editar-button {
   font-weight: bold;
-  color: #32c8a3; // Color del botón "Ver Detalle"
+  color: #32c8a3;
+}
+
+// Estilo del botón "Cancelar"
+ion-button[color="light"] {
+  color: #555555;
+  font-weight: bold;
 }
