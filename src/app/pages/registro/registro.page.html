@@ -14,7 +14,7 @@
     </ion-card-header>
 
     <form [formGroup]="usuario" (ngSubmit)="registroUsuario()">
-      <ion-input formControlName="correo" type="text" labelPlacement="stacked" label="Correo Institucional" ></ion-input>
+      <ion-input formControlName="correo" type="text" labelPlacement="stacked" label="Correo Institucional"></ion-input>
       <ion-text *ngIf="usuario?.get('correo')?.hasError('required') && usuario?.get('correo')?.touched" color="danger">
         El correo es obligatorio.
       </ion-text>
