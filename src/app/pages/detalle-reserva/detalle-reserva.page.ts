@@ -193,7 +193,7 @@ export class DetalleReservaPage implements OnInit, AfterViewInit {
           routeWhileDragging: false,
           fitSelectedRoutes: true,
           lineOptions: {
-            styles: [{ color: '#800080', opacity: 0.8, weight: 6 }], // Color morado
+            styles: [{ color: '#1F2235', opacity: 0.8, weight: 6 }], // Color morado
             extendToWaypoints: true,
             missingRouteTolerance: 1
           }

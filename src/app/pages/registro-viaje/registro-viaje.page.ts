@@ -145,7 +145,7 @@ export class RegistroViajePage implements OnInit, AfterViewInit {
                 ],
                 fitSelectedRoutes: true,
                 lineOptions: {
-                    styles: [{ color: '#800080', opacity: 0.8, weight: 6 }],
+                    styles: [{ color: '#1F2235', opacity: 0.8, weight: 6 }],
                     extendToWaypoints: true,
                     missingRouteTolerance: 1
                 }
