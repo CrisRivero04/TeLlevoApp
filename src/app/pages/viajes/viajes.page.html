@@ -14,6 +14,7 @@
           <p class="viaje-info">Asientos disponibles: {{v.asientos_disp}}</p>
           <p class="viaje-info">Precio: {{v.monto | currency}}</p>
           <p class="viaje-info">Hora de salida: {{v.hora_salida}}</p>
+          <p class="viaje-info">Estado: {{v.estado?.toLowerCase() | titlecase}}</p>
           <ion-button [routerLink]="['/detalle-reserva', v.id]" expand="block" color="success" class="detalle-button">
             Ver Detalle
           </ion-button>

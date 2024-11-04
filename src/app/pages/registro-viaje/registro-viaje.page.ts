@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 import { NavController } from '@ionic/angular';
 import * as L from 'leaflet';
@@ -34,7 +35,7 @@ export class RegistroViajePage implements OnInit, AfterViewInit {
     pasajeros: new FormControl([]),
   });
 
-  constructor(private crudViajes: ViajeService, private router: Router, private navController: NavController) { }
+  constructor(private crudViajes: ViajeService, private router: Router, private navController: NavController, private alertController: AlertController,) { }
 
   ngOnInit() {
     this.usuario = JSON.parse(localStorage.getItem("usuario") || '');
@@ -43,7 +44,7 @@ export class RegistroViajePage implements OnInit, AfterViewInit {
 
   public async registrar() {
     console.log("Presionó registrar");
-    
+  
     // Verificar si el formulario es válido
     if (this.viaje.invalid) {
       console.error("Formulario inválido. Complete todos los campos obligatorios.");
@@ -51,15 +52,39 @@ export class RegistroViajePage implements OnInit, AfterViewInit {
       return;
     }
   
-    const viajeData = this.viaje.value;
+    // Mostrar la alerta de confirmación
+    const alert = await this.alertController.create({
+      header: 'Confirmación',
+      message: '¿Seguro que quieres registrar este viaje?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            // No se hace nada si el usuario selecciona "No"
+          }
+        },
+        {
+          text: 'Sí',
+          handler: async () => {
+            const viajeData = this.viaje.value;
   
-    const resultado = await this.crudViajes.createViaje(viajeData, this.usuario.rut);
-    
-    if (resultado) {
-      this.router.navigate(["home/viajes"]);
-    } else {
-      console.error("Error al registrar el viaje. Asegúrese de que el conductor exista.");
-    }
+            const resultado = await this.crudViajes.createViaje(viajeData, this.usuario.rut);
+  
+            if (resultado) {
+              // Redirigir a la página de viajes y forzar una recarga
+              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+                this.router.navigate(['/home/viajes']);
+              });
+            } else {
+              console.error("Error al registrar el viaje. Asegúrese de que el conductor exista.");
+            }
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
   }
   
   

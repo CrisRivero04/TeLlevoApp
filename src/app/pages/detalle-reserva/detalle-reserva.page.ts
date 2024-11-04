@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { Location } from '@angular/common';
 
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
@@ -27,7 +28,8 @@ export class DetalleReservaPage implements OnInit, AfterViewInit {
     private crudViajes: ViajeService,
     private crudUsuarios: UsuarioService,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private location: Location
   ) {}
 
   async ngOnInit() {
@@ -138,11 +140,22 @@ export class DetalleReservaPage implements OnInit, AfterViewInit {
     if (this.esConductor) {
       const exito = await this.crudViajes.cambiarEstadoViaje(this.id);
       if (exito) {
-        this.viaje.estado = this.viaje.estado === 'Pendiente' ? 'En camino' : 'Terminado';
+        this.viaje.estado = this.viaje.estado === 'Pendiente' ? 'En curso' : 'Terminado';
         this.viajeTerminado = this.viaje.estado === 'Terminado';
       }
     }
   }
+
+  public reloadAndGoBack() {
+    // Navega hacia la página anterior en el historial del navegador
+    this.location.back();
+  
+    // Recarga la página actual
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
+  }
+  
 
   ngAfterViewInit() {
     if (this.map) {
