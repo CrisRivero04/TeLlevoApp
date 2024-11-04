@@ -36,14 +36,29 @@ ion-content {
   border-radius: 15px;
   margin: 15px;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
-  background-color: #ffffff;
+  background-color: #333333; // Fondo gris oscuro para la tarjeta de perfil
+  color: #dddddd; // Letra gris clara
+}
+
+// Estilo de la tarjeta de detalle del usuario
+.detalle-card {
+  border-radius: 15px;
+  margin: 15px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  background-color: #333333; // Fondo gris oscuro para la tarjeta de detalles
+  color: #dddddd; // Letra gris clara
 }
 
 // Título del perfil
 .perfil-titulo {
-  color: #333333;
+  color: #dddddd; // Color gris claro para el título
   font-size: 1.2em;
   font-weight: 600;
+}
+
+// Tipo de usuario
+.usuario-tipo {
+  color: #dddddd; // Color gris claro para el tipo de usuario
 }
 
 // Estilo del botón "Guardar Cambios"
