@@ -1,0 +1,29 @@
+.toolbar-principal {
+    --background: #32c857; /* Color verde */
+    --color: #f2f2f2; /* Letra en color blanco */
+  }
+  
+  .button-danger {
+    --background: #FF4C4C; /* Color rojo para eliminar */
+    --color: #000000; /* Texto negro */
+  }
+  
+  .button-modify {
+    --background: #32c857; /* Color verde para modificar */
+    --color: #000000; /* Texto negro */
+  }
+  
+  .card-editar {
+    background-color: #f9f9f9; /* Fondo claro para la tarjeta de edición */
+  }
+  
+  .button-guardar {
+    --background: #5cb85c; /* Color verde para guardar */
+    --color: #000000; /* Texto negro */
+  }
+  
+  .button-cancelar {
+    --background: #FF4C4C; /* Color rojo para cancelar */
+    --color: #000000; /* Texto negro */
+  }
+  
